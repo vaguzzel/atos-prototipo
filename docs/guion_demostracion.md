@@ -1,0 +1,20 @@
+# Guion de demostración de ATOS (15 minutos)
+
+Cada bloque empieza desde el panel «Demostración» (abajo a la izquierda), sección «Guion de demostración»: el
+enlace cambia al perfil indicado y abre la pantalla de inicio del bloque. Si algo quedó en un estado raro,
+«Reiniciar demostración» devuelve todo al inicio.
+
+| Minuto | Bloque | Perfil | Inicio | Qué mostrar |
+|---|---|---|---|---|
+| 0:00 a 2:00 | Flujo principal: ingreso de exportación | Funcionario de gate | `#/gate/visita/VIS-240871` | Los siete pasos con su línea de estado: cita (las franjas sin cupo no se ofrecen), prevalidación con «Usar archivo de ejemplo», llegada con lectura óptica y dígito verificador, masa bruta dentro del 5 %, destino con su explicación y confirmación de «Abrir barrera», posición por telemetría sin confirmación del operador y salida con estadía de 34 minutos frente a 45. Abrir «Citas del día» para ver la cita creada. |
+| 2:00 a 3:00 | Excepción: documentación incompleta | Funcionario de gate | `#/gate/visita/VIS-240872` | «Simular: el camión llega igual al gate» → carril de excepción sin ocupar un puesto. Cambiar a «Cliente de carga» → «Validación documental» → subir el documento → el camión vuelve a la fila con su franja. Mencionar la segunda excepción: `#/gate/visita/VIS-240873`, masa sobre 5 % y plan de estiba marcado. |
+| 3:00 a 5:00 | Proceso secundario: inspección de autoridad | Área de documentación | `#/inspecciones/INS-3307` | Flujo de aprobación visual: confirmación del inspector, remoción, atención y acta firmada. Volver al listado: filtros, orden, paginación, acciones masivas y el aviso de riesgo de incumplimiento. «Cumplimiento de la hora acordada»: 13,5 % frente a la meta de 12 %. |
+| 5:00 a 7:00 | Terreno sin conexión | Ronda reefer y mantenimiento | `#/terreno/ronda` | «Simular la pérdida de cobertura» → confirmar la alarma AL-7781 y registrar una ronda: quedan en la cola del equipo. «Recuperar la cobertura» → sincronización y conflicto resuelto en la bitácora. Mostrar la terminal de cabina (`#/cabina/patio`): instrucción sin tocar la pantalla y vía de excepción bloqueada en movimiento. |
+| 7:00 a 9:00 | Patio refrigerado | Supervisor de turno y de patio | `#/reefer/alarmas` | «Disparar una alarma» (falla del tablero TR-14): aviso simultáneo a dos personas, escalamiento si nadie confirma y confirmación auditada. Mapa de las 2.400 tomas, serie continua de un contenedor, descarga en formato abierto y certificado verificable en la página pública. |
+| 9:00 a 11:00 | Tablero analítico | Jefatura de operaciones | `#/analitica` | Indicadores con línea base, meta y valor actual; filtros por período y categoría; ocho tipos de gráfico con su tabla de datos; clic en «Estadía del camión» para bajar al gráfico, la tabla y el evento de origen; exportación en segundo plano con aviso. |
+| 11:00 a 12:00 | Administración | Administrador funcional | `#/admin/parametros` | Cambiar la tolerancia de masa bruta: simular el efecto antes de aplicar, la frontera entre lo parametrizable y lo que requiere desarrollo, y la auditoría que registra el cambio. |
+| 12:00 a 13:00 | Portal público en inglés | Persona del público | `#/?lang=en` | Consulta de un contenedor con validación ISO 6346, congestión por puesto, franjas disponibles y avisos; el idioma se conserva al recargar. |
+| 13:00 a 15:00 | Cierre | Cualquiera | Panel de demostración | Caída del enlace (ELC) y su aviso en todas las vistas; modo trazabilidad con los requerimientos de cada pantalla; «Sistema de diseño» y «Arquitectura de información» en el pie de página. |
+
+Datos de apoyo: contenedores ATOU 482913 7 y ATOU 517206 8 (dígito verificador ISO 6346 válido), camiones
+KTRP-51 y HXLW-28, certificado CF-AC-2027-0418, día de operación simulado: lunes 6 de diciembre, turno A.
