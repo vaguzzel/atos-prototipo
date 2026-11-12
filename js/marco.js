@@ -59,6 +59,8 @@ function rutaActual() {
 }
 const titulo = (def, p = {}) => (typeof def.t === 'function' ? def.t(p) : ES(def.t));
 function hrefDe(id, p = {}) { const d = RID[id]; return '#' + d.ruta.replace(/:([a-z]+)/g, (_, k) => encodeURIComponent(p[k])); }
+function puedeIr(h) { const camino = String(h).replace(/^#/, '').split('?')[0]; const d = RUTAS.find((x) => x.rx.test(camino)); return !d || permitido(d); }
+function enlaceSi(h, txt) { return puedeIr(h) ? `<a href="${h}">${txt}</a>` : txt; }
 function ir(h) { if (location.hash === h) refrescar(); else location.hash = h; }
 const compacto = (c) => String(c).replace(/\s/g, '');
 
@@ -140,11 +142,11 @@ function barraPublica() {
   return `<header class="cabecera-publica" role="banner">
     <section class="franja-estado" aria-label="${T('Estado del terminal', 'Terminal status')}"><span class="vivo" aria-hidden="true"></span><ul>
       <li><strong>Terminal Portuario Aconcagua</strong></li><li>${T(`Gate abierto · espera promedio de ${prom} min`, `Gate open · average wait ${prom} min`)}</li>
-      ${prox ? `<li>${T(`Próxima franja con cupos: ${hm(prox.ini)}`, `Next slot with availability: ${hm(prox.ini)}`)}</li>` : ''}<li>${T('Cierre de recepción de la nave Cóndor Austral: martes 7 de diciembre, 08:00', 'Receiving cut-off for the vessel Cóndor Austral: Tuesday, December 7, 08:00')}</li></ul></section>
+      ${prox ? `<li>${T(`Próxima franja con cupos: ${hm(prox.ini)}`, `Next slot with availability: ${hm(prox.ini)}`)}</li>` : ''}<li>${T('Cierre de recepción de la nave Cóndor Austral: jueves 7 de diciembre, 08:00', 'Receiving cut-off for the vessel Cóndor Austral: Thursday, December 7, 08:00')}</li></ul></section>
     <div class="barra barra-publica"><a class="marca" href="#/">${LOGO}<span class="nombre"><b>ATOS</b><small>${T('Sistema de operación del terminal', 'Terminal operating system')}</small></span></a>
       <form class="buscador-publico" role="search" data-form="buscar-publico" novalidate>${ic('buscar')}<label class="sr" for="bp-q">${T('Buscar en el portal', 'Search the portal')}</label>
-        <input type="search" id="bp-q" list="bp-sug" autocomplete="off" placeholder="${T('Contenedor o certificado', 'Container or certificate')}" aria-describedby="bp-ayuda"><span class="sr" id="bp-ayuda">${T('Por ejemplo, ATOU 482913 7 o CF-AC-2027-0418.', 'For example, ATOU 482913 7 or CF-AC-2027-0418.')}</span>
-        <datalist id="bp-sug"><option value="ATOU 482913 7"></option><option value="CF-AC-2027-0418"></option><option value="${T('Congestión del gate', 'Gate congestion')}"></option><option value="${T('Verificar un certificado', 'Verify a certificate')}"></option><option value="${T('Registrar mi organización', 'Register my organization')}"></option><option value="${T('Recuperar el acceso', 'Recover access')}"></option></datalist>
+        <input type="search" id="bp-q" list="bp-sug" autocomplete="off" placeholder="${T('Contenedor o certificado', 'Container or certificate')}" aria-describedby="bp-ayuda"><span class="sr" id="bp-ayuda">${T('Por ejemplo, ATOU 482913 7 o CF-AC-2028-0418.', 'For example, ATOU 482913 7 or CF-AC-2028-0418.')}</span>
+        <datalist id="bp-sug"><option value="ATOU 482913 7"></option><option value="CF-AC-2028-0418"></option><option value="${T('Congestión del gate', 'Gate congestion')}"></option><option value="${T('Verificar un certificado', 'Verify a certificate')}"></option><option value="${T('Registrar mi organización', 'Register my organization')}"></option><option value="${T('Recuperar el acceso', 'Recover access')}"></option></datalist>
         <button type="submit" class="boton">${T('Buscar', 'Search')}</button></form>
       <nav aria-label="${T('Portal público', 'Public portal')}" class="nav-pildora">${enl('#/publico/congestion', 'congestion', T('Congestión', 'Congestion'))}${enl('#/verificar', 'verificar', T('Verificar certificado', 'Verify certificate'))}</nav>
       <button type="button" class="boton-icono boton-pausa" data-acc="pausa" aria-pressed="${pausa}" aria-label="${T('Pausar las animaciones', 'Pause animations')}" title="${T('Pausar las animaciones', 'Pause animations')}">${ic(pausa ? 'reproducir' : 'pausa')}</button>
@@ -162,7 +164,7 @@ FORM['buscar-publico'] = (f) => {
   const n = q.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const paginas = [[/congest|espera|fila|vial|traffic|wait/, '#/publico/congestion'], [/certific|frio|cadena|cold/, '#/verificar'], [/regist|organiz|cuenta|account/, '#/registro'], [/clave|contrase|recuper|password|recover/, '#/recuperar'], [/ingres|entrar|sesion|sign/, '#/ingresar'], [/cita|franja|cupo|slot/, '#/']];
   const hit = paginas.find(([rx]) => rx.test(n)); if (hit) { ir(hit[1]); return; }
-  aviso(T(`No encontramos «${esc(q)}». Prueba con un número de contenedor, como ATOU 482913 7, o con un código de certificado, como CF-AC-2027-0418.`, `No results for “${esc(q)}”. Try a container number, such as ATOU 482913 7, or a certificate code, such as CF-AC-2027-0418.`));
+  aviso(T(`No encontramos «${esc(q)}». Prueba con un número de contenedor, como ATOU 482913 7, o con un código de certificado, como CF-AC-2028-0418.`, `No results for “${esc(q)}”. Try a container number, such as ATOU 482913 7, or a certificate code, such as CF-AC-2028-0418.`));
 };
 function pie() {
   return `<footer class="pie" role="contentinfo"><span>ATOS · ${T('solución de Terabyte para el Terminal Portuario Aconcagua S.A. · Datos simulados de demostración: nada de lo que ingreses se guarda.', 'Terabyte solution for Terminal Portuario Aconcagua S.A. · Simulated demonstration data: nothing you enter is stored.')}</span></footer>`;
@@ -246,6 +248,7 @@ function panelDemo() {
     ['gate', '#/gate/visita/VIS-240872', T('Excepción: documentación incompleta', 'Exception: incomplete documents'), '1 min'],
     ['documentacion', '#/inspecciones/INS-3307', T('Proceso secundario: inspección de autoridad', 'Secondary process: authority inspection'), '2 min'],
     ['ronda', '#/terreno/ronda', T('Terreno sin conexión: App Móvil de Terreno', 'Field without connection: mobile app'), '2 min'],
+    ['operador_patio', '#/cabina/patio', T('Terminal de cabina del equipo de patio', 'Yard equipment cab terminal'), '30 s'],
     ['supervisor', '#/reefer/alarmas', T('Patio refrigerado: alarmas y cadena de frío', 'Reefer yard: alarms and cold chain'), '2 min'],
     ['jefatura', '#/analitica', T('Tablero analítico', 'Analytics dashboard'), '2 min'],
     ['admin', '#/admin/parametros', T('Administración: parámetros con simulación', 'Administration: parameters with simulation'), '1 min'],
@@ -312,11 +315,14 @@ function iniciarTour(paso = 0) {
   if (!E.sesion || rutaActual().def.id !== 'inicio') return; cerrarTour(false);
   const pasosOk = TOUR.filter(([s]) => $(s)); if (!pasosOk.length) return; paso = Math.min(paso, pasosOk.length - 1); E.ui.tourPaso = paso;
   const [sel, t, x] = pasosOk[paso]; const obj = $(sel); obj.classList.add('tour-marca'); obj.scrollIntoView?.({ block: 'nearest' });
-  const d = document.createElement('div'); d.className = 'tour'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-labelledby', 'tour-t'); d.id = 'tour';
+  const d = document.createElement('div'); d.className = 'tour'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-labelledby', 'tour-t'); d.id = 'tour';
   d.innerHTML = `<p class="etiqueta">${T('Recorrido guiado', 'Guided tour')} · ${T('paso', 'step')} ${paso + 1} ${T('de', 'of')} ${pasosOk.length}</p><h2 id="tour-t" tabindex="-1">${ES(t)}</h2><p>${ES(x)}</p>${progreso(paso + 1, pasosOk.length, T('Avance del recorrido', 'Tour progress'), { texto: `${paso + 1}/${pasosOk.length}` })}
     <div class="grupo-botones" style="margin-top:12px">${paso ? btn(T('Anterior', 'Previous'), { tipo: 'secundario', acc: 'tour', arg: paso - 1, id: 'tour-ant' }) : ''}${paso < pasosOk.length - 1 ? btn(T('Siguiente', 'Next'), { acc: 'tour', arg: paso + 1, id: 'tour-sig' }) : btn(T('Terminar', 'Finish'), { acc: 'tour-fin', id: 'tour-fin' })}${btn(T('Saltar el recorrido', 'Skip the tour'), { tipo: 'terciario', acc: 'tour-fin', id: 'tour-saltar' })}</div>`;
   document.body.append(d); $('#tour-t').focus();
-  d.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarTour(); });
+  d.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarTour();
+    if (e.key === 'Tab') { const f = $$('button:not([disabled]), a[href]', d); const i = f.indexOf(document.activeElement); if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); } }
+  });
 }
 function cerrarTour(marcar = true) { $$('.tour-marca').forEach((x) => x.classList.remove('tour-marca')); $('#tour')?.remove(); if (marcar && E.sesion) { E.ui.tourVisto[E.sesion.perfil] = true; } }
 ACC.tour = (el) => iniciarTour(Number(el.dataset.arg));
@@ -379,7 +385,8 @@ function instalarEventos() {
       if (e.key === 'Enter') { if (act) { e.preventDefault(); acElegir(t, act); return; } if (t.dataset.global && t.value.trim()) { e.preventDefault(); const q = t.value.trim(); acCerrar(t); ir('#/buscar?q=' + encodeURIComponent(q)); return; } }
       if (e.key === 'Escape') { if (lista && !lista.hidden) { e.preventDefault(); acCerrar(t); return; } }
     }
-    if (e.key === 'Escape') { cerrarMenus(); $$('.ctx.visible').forEach((c) => c.classList.remove('visible')); if (E.ui.menuAbierto) ACC.menu(); return; }
+    if (e.key === 'Escape') { const ab = $('[role="menu"]:not([hidden]), #panel-notif:not([hidden])'); const origen = ab && ab.contains(t) ? document.querySelector(`[aria-controls="${ab.id}"]`) : null; cerrarMenus(); $$('.ctx.visible').forEach((c) => c.classList.remove('visible')); if (E.ui.menuAbierto) ACC.menu(); origen?.focus(); return; }
+    if ((e.key === 'Enter' || e.key === ' ') && t instanceof SVGElement && t.dataset?.acc && ACC[t.dataset.acc]) { e.preventDefault(); ACC[t.dataset.acc](t, e); return; }
     const menu = t.closest?.('[role="menu"]');
     if (menu && ['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) { e.preventDefault(); const it = $$('[role="menuitem"]', menu); let i = it.indexOf(t); i = e.key === 'Home' ? 0 : e.key === 'End' ? it.length - 1 : e.key === 'ArrowDown' ? (i + 1) % it.length : (i - 1 + it.length) % it.length; it[i].focus(); return; }
     if (t.getAttribute?.('role') === 'tab' && ['ArrowRight', 'ArrowLeft'].includes(e.key)) { const tabs = $$('[role="tab"]', t.closest('[role="tablist"]')); let i = tabs.indexOf(t); i = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length; tabs[i].click(); return; }

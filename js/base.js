@@ -24,7 +24,7 @@ const hm = (min) => { const m = ((Math.round(min) % 1440) + 1440) % 1440; return
 const aMin = (t) => { const [h, m] = String(t).split(':').map(Number); return h * 60 + m; };
 const DIAS = { es: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'], en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] };
 const MESES = { es: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'], en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] };
-const HOY = new Date(2027, 11, 6); // lunes 6 de diciembre: día de operación simulado (antes del congelamiento del 15 de diciembre)
+const HOY = new Date(2028, 11, 6); // 6 de diciembre de 2028, mes 23 del contrato (S1: mes 1 = febrero de 2027): las dos etapas en producción desde el mes 21: día de operación simulado (antes del congelamiento del 15 de diciembre)
 const dia = (offset = 0) => { const d = new Date(HOY); d.setDate(d.getDate() + offset); return d; };
 const fFecha = (d, conDia = true) => {
   const l = IDIOMA === 'en' ? 'en' : 'es';

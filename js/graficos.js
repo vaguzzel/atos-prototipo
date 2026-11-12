@@ -9,7 +9,8 @@ function tablaDatos(titulo, cab, filas) {
 }
 function marco(titulo, resumen, svg, tabla, extra = '') {
   const id = uid('g');
-  return `<figure class="grafico"><figcaption id="${id}">${titulo}</figcaption><svg role="img" aria-labelledby="${id} ${id}d" ${svg.attrs}><desc id="${id}d">${esc(resumen)}</desc>${svg.cuerpo}</svg>${extra}${tabla}</figure>`;
+  const rol = svg.cuerpo.includes('role="link"') ? 'group' : 'img'; // con barras navegables, el gráfico no puede ser una imagen opaca
+  return `<figure class="grafico"><figcaption id="${id}">${titulo}</figcaption><svg role="${rol}" aria-labelledby="${id} ${id}d" ${svg.attrs}><desc id="${id}d">${esc(resumen)}</desc>${svg.cuerpo}</svg>${extra}${tabla}</figure>`;
 }
 const fmt = (v, d = 0) => num(v, d);
 
@@ -21,7 +22,7 @@ function gBarras({ titulo, datos, meta, unidad = '', dec = 0, alto = 220, peorSi
   for (let k = 0; k <= 4; k++) { const v = (max / 4) * k; c += `<line class="svg-guia" x1="${mi}" x2="${W - md}" y1="${y(v)}" y2="${y(v)}"/><text class="svg-texto" x="${mi - 6}" y="${y(v) + 4}" text-anchor="end">${fmt(v, 0)}</text>`; }
   datos.forEach((d, i) => {
     const malo = meta != null && (peorSiMayor ? d.v > meta : d.v < meta); const x = mi + i * bw + bw * 0.18, w = bw * 0.64;
-    c += `<rect x="${x}" y="${y(d.v)}" width="${w}" height="${H - mb - y(d.v)}" rx="4" fill="${malo ? '#A63D46' : '#4A5788'}" ${acc ? `class="punto-clic" data-acc="${acc}" data-arg="${esc(d.arg ?? d.e)}"` : ''}><title>${esc(d.e)}: ${fmt(d.v, dec)} ${unidad}</title></rect>`;
+    c += `<rect x="${x}" y="${y(d.v)}" width="${w}" height="${H - mb - y(d.v)}" rx="4" fill="${malo ? '#A63D46' : '#4A5788'}" ${acc ? `class="punto-clic" data-acc="${acc}" data-arg="${esc(d.arg ?? d.e)}" tabindex="0" role="link" aria-label="${esc(d.e)}: ${fmt(d.v, dec)} ${unidad}. ${T('Ver el detalle', 'View detail')}"` : ''}><title>${esc(d.e)}: ${fmt(d.v, dec)} ${unidad}</title></rect>`;
     c += `<text class="svg-texto" x="${x + w / 2}" y="${y(d.v) - 5}" text-anchor="middle" font-weight="700">${malo ? '! ' : ''}${fmt(d.v, dec)}</text>`;
     c += `<text class="svg-texto" x="${x + w / 2}" y="${H - mb + 16}" text-anchor="middle">${esc(d.e)}</text>`;
   });
@@ -89,11 +90,11 @@ function gCalor({ titulo, filas, columnas, valores, unidad = '%', acc }) {
   let c = columnas.map((col, j) => `<text class="svg-texto" x="${mi + j * cw + cw / 2}" y="${ms - 8}" text-anchor="middle">${esc(col)}</text>`).join('');
   filas.forEach((f, i) => {
     c += `<text class="svg-texto" x="${mi - 8}" y="${ms + i * ch + ch / 2 + 4}" text-anchor="end" font-weight="700">${esc(f)}</text>`;
-    columnas.forEach((_, j) => { const v = valores[i][j]; const n = nivel(v); c += `<rect x="${mi + j * cw}" y="${ms + i * ch}" width="${cw - 2}" height="${ch - 2}" fill="${escala[n]}" stroke="#4A5788" stroke-width=".6" ${acc ? `class="punto-clic" data-acc="${acc}" data-arg="${esc(f)}"` : ''}><title>${esc(f)}, ${esc(columnas[j])}: ${v} ${unidad}</title></rect><text class="svg-texto ${n >= 3 ? 'claro' : ''}" x="${mi + j * cw + cw / 2 - 1}" y="${ms + i * ch + ch / 2 + 3}" text-anchor="middle" font-size="11">${v}</text>`; });
+    columnas.forEach((_, j) => { const v = valores[i][j]; const n = nivel(v); c += `<rect x="${mi + j * cw}" y="${ms + i * ch}" width="${cw - 2}" height="${ch - 2}" fill="${escala[n]}" stroke="#4A5788" stroke-width=".6" ${acc ? `class="punto-clic" data-acc="${acc}" data-arg="${esc(f)}" tabindex="0" role="link" aria-label="${esc(f)}, ${esc(columnas[j])}: ${v} ${unidad}. ${T('Ver el detalle', 'View detail')}"` : ''}><title>${esc(f)}, ${esc(columnas[j])}: ${v} ${unidad}</title></rect><text class="svg-texto ${n >= 3 ? 'claro' : ''}" x="${mi + j * cw + cw / 2 - 1}" y="${ms + i * ch + ch / 2 + 3}" text-anchor="middle" font-size="11">${v}</text>`; });
   });
   const resumen = `${titulo}. ${filas.length} ${T('filas por', 'rows by')} ${columnas.length} ${T('columnas; el valor de cada celda está escrito en ella', 'columns; each cell shows its value')}.`;
   return marco(titulo, resumen, { attrs: `viewBox="0 0 ${W} ${H}"`, cuerpo: c }, tablaDatos(titulo, [T('Bloque', 'Block'), ...columnas.map(esc)], filas.map((f, i) => [esc(f), ...valores[i].map((v) => v + ' ' + unidad)])),
-    `<ul class="leyenda"><li><span class="muestra" style="background:#FFFFFF"></span>&lt; 50 %</li><li><span class="muestra" style="background:#BFD6EE"></span>65 a 75 %</li><li><span class="muestra" style="background:#2B3A7A"></span>85 a 92 %</li><li><span class="muestra" style="background:#1B1F3B"></span>≥ 92 %</li></ul>`);
+    `<ul class="leyenda">${[['#FFFFFF', '&lt; 50 %'], ['#DCE8F5', '50 a 65 %'], ['#BFD6EE', '65 a 75 %'], ['#4A5788', '75 a 85 %'], ['#2B3A7A', '85 a 92 %'], ['#1B1F3B', '≥ 92 %']].map(([c, t]) => `<li><span class="muestra" style="background:${c}"></span>${t}</li>`).join('')}</ul>`);
 }
 
 /* dispersión: puntos destacados con otra forma (cuadrado) y otro color */

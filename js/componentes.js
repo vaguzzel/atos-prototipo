@@ -6,7 +6,7 @@ const ACC = {};   // acciones por data-acc
 const FORM = {};  // envíos por data-form
 const CAMBIO = {}; // cambios por data-cambio
 const TABLAS = {};
-let _uid = 0; const uid = (p = 'u') => p + (++_uid);
+let _uid = 100; const uid = (p = 'u') => p + (++_uid); // empieza sobre los identificadores de partida (TA-1 a TA-23, NO-1 a NO-16)
 
 /* ---------------------------------------------------------------- piezas simples */
 function btn(txt, o = {}) {
@@ -239,7 +239,9 @@ function aviso(texto, tipo = '', o = {}) {
   const d = document.createElement('div'); d.className = `aviso-flotante ${tipo}`;
   d.innerHTML = `${ic(tipo === 'error' ? 'error' : 'check')}<div>${texto}${o.href ? ` <a href="${o.href}">${o.enlace || T('Ver', 'View')}</a>` : ''}</div><button type="button" class="cerrar-aviso" aria-label="${T('Cerrar aviso', 'Dismiss')}">${ic('cerrar')}</button>`;
   $('#avisos').append(d); $('.cerrar-aviso', d).addEventListener('click', () => d.remove());
-  setTimeout(() => d.remove(), o.ms || 7000);
+  if (o.href) return; // con un enlace, el aviso queda hasta que se cierra (WCAG 2.2.1)
+  let t; const programar = () => { clearTimeout(t); t = setTimeout(() => d.remove(), o.ms || 7000); };
+  d.addEventListener('mouseenter', () => clearTimeout(t)); d.addEventListener('focusin', () => clearTimeout(t)); d.addEventListener('mouseleave', programar); d.addEventListener('focusout', programar); programar();
 }
 function anunciar(t) { const a = $('#anuncio'); if (!a) return; a.textContent = ''; setTimeout(() => { a.textContent = t; }, 60); }
 

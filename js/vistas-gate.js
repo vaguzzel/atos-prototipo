@@ -31,6 +31,16 @@ function evento(v, hecho, t, fuente, clase = '') { v.eventos.push({ hora: horaV(
 const visitaPorId = (id) => E.db.visitas.find((v) => v.id === id) || E.db.retiros.find((v) => v.id === id);
 const tolMasa = () => E.db.parametros.find((p) => p.id === 'P-GAT-01').valor;
 const kgs = (n) => num(n) + ' kg';
+const promEstadia = () => Math.round(E.db.estadias.reduce((s, x) => s + x.estadia, 0) / E.db.estadias.length);
+const enExcepcion = () => E.db.visitas.filter((v) => v.excepcion === 'doc').length + 2; // + los dos camiones de otras empresas de la tabla del carril
+VALIDADORES.kg = (s) => { const t = String(s).trim(); if (!t) return { ok: false, vacio: true, msg: 'Escribe la masa en kilos.' }; const n = Number(t.replace(/[.\s]/g, '')); return Number.isInteger(n) && n >= 1000 && n <= 40000 ? { ok: true, msg: '' } : { ok: false, msg: 'Escribe la masa en kilos, entre 1.000 y 40.000, sin decimales.' }; };
+function citaBloqueada(c) {
+  if (!['Confirmada', 'Reprogramada'].includes(c.estado)) return `La cita ${c.id} está ${c.estado.toLowerCase()}: ya no se puede cambiar.`;
+  const v = c.visita ? visitaPorId(c.visita) : null;
+  if (v && v.excepcion) return `El camión ${v.patente} está en el carril de excepción: primero se resuelve el documento.`;
+  if (v && v.paso > 2) return `El camión ${v.patente} ya entró al gate: la cita ya no se puede cambiar.`;
+  return '';
+}
 function asignarPosicion(v) {
   const base = { 'VIS-240871': { b: 'C', bahia: 14, fila: 3, alt: 2 }, 'VIS-240872': { b: 'C', bahia: 15, fila: 1, alt: 3 }, 'VIS-240873': { b: 'B', bahia: 9, fila: 2, alt: 1 } }[v.id] || { b: 'A', bahia: 5, fila: 2, alt: 2 };
   const cerrado = E.db.bloques.find((b) => b.id === base.b)?.cerrado;
@@ -41,7 +51,7 @@ function asignarPosicion(v) {
 }
 const textoPos = (p) => `Bloque ${p.b}, bahía ${p.bahia}, fila ${p.fila}, altura ${p.alt}`;
 function razonesPos(v, p) {
-  return [`Bloque ${p.b}: recepción de exportación de la nave Cóndor Austral (REC-1184), cierre martes 7, 08:00.`, `Bahía ${p.bahia}: el plan de estiba propuesto la embarca en la secuencia 2 de la grúa G4.`, `Altura ${p.alt}: ${num(v.masaMed / 1000, 1)} toneladas, bajo los contenedores más livianos (regla RP-03, versión 2).`, 'Sin remociones previstas: sale antes que los que quedan debajo (regla RP-11, versión 4).', `${v.rtg} es la grúa de patio libre más cercana: menos recorrido y menos emisiones.`].concat(p.cambio ? [p.cambio] : []);
+  return [`Bloque ${p.b}: recepción de exportación de la nave Cóndor Austral (REC-1184), cierre jueves 7, 08:00.`, `Bahía ${p.bahia}: el plan de estiba propuesto la embarca en la secuencia 2 de la grúa G4.`, `Altura ${p.alt}: ${num(v.masaMed / 1000, 1)} toneladas, bajo los contenedores más livianos (regla RP-03, versión 2).`, 'Sin remociones previstas: sale antes que los que quedan debajo (regla RP-11, versión 4).', `${v.rtg} es la grúa de patio libre más cercana: menos recorrido y menos emisiones.`].concat(p.cambio ? [p.cambio] : []);
 }
 
 /* ---------------------------------------------------------------- flujo de ingreso de exportación */
@@ -84,7 +94,7 @@ function panelPaso(v, i) {
     return `${cabPaso(v, 1)}${res ? `<h3>Resultado de la validación</h3><ul class="lista-simple">${DOCS.map(([k, n]) => `<li class="fila-flex entre"><span>${n}</span>${v.docs[k] === 'ok' ? insig('Validado', 'ok') : insig('Falta o no corresponde', 'error')}</li>`).join('')}</ul>` : ''}
       ${v.faltante && v.docs[v.faltante] !== 'ok' ? msj('aviso', 'Falta la autorización aduanera de exportación', `ATOS avisó a ${v.agencia} a las ${horaV(v, 'aviso')}. La agencia puede subir el documento ahora; si el camión llega igual, pasa al carril de excepción sin ocupar un puesto del gate.`) : ''}
       <form data-form="v-docs" data-arg="${v.id}" novalidate><div class="reticula r3">${DOCS.map(([k, n, ej]) => (v.docs[k] === 'ok' ? `<div class="zona-carga cargada">${ic('check', 'g')}<p><strong>${n}</strong><br>Validado</p></div>` : zonaCarga({ id: `doc-${v.id}-${k}`, et: n, ayuda: 'PDF de hasta 10 MB.', ejemplo: ej }))).join('')}</div>
-      ${v.docs.vgm !== 'ok' ? campo({ id: 'v-vgm', et: 'Masa bruta verificada declarada (kg)', valor: num(v.masaDecl), ayuda: 'La que firma el embarcador. Se compara con la báscula al llegar.', val: 'req', req: true, modo: 'numeric' }) : ''}
+      ${v.docs.vgm !== 'ok' ? campo({ id: 'v-vgm', et: 'Masa bruta verificada declarada (kg)', valor: num(v.masaDecl), ayuda: 'La que firma el embarcador. Se compara con la báscula al llegar.', val: 'kg', req: true, modo: 'numeric' }) : ''}
       <div class="grupo-botones">${btn(res ? 'Corregir y reenviar' : 'Enviar a validación', { submit: true, tipo: 'clave', ic: 'subir', id: 'b-paso' })}${v.faltante && v.docs[v.faltante] !== 'ok' ? btn('Simular: el camión llega igual al gate', { tipo: 'secundario', acc: 'v-llega-sin', arg: v.id, id: 'b-llega-sin' }) : ''}</div></form>`;
   }
   if (i === 2) {
@@ -99,7 +109,7 @@ function panelPaso(v, i) {
   if (i === 3) {
     const pesado = v.pesado; const dif = ((v.masaMed - v.masaDecl) / v.masaDecl) * 100; const tol = tolMasa();
     if (v.excepcion === 'masa') return `${cabPaso(v, 3)}${tablaMasa(v)}${msj('error', `Diferencia de ${num(dif, 1)} %: supera la tolerancia de ${num(tol, 1)} %`, 'ATOS detuvo el avance del camión, avisó al embarcador y marcó el plan de estiba de REC-1184 para replanificación.')}
-      <ul class="lista-simple"><li>${ic('correo')} Aviso a ${esc(v.cliente)} y a ${esc(v.agencia)}: ${horaV(v, 'masa')}</li><li>${ic('nave')} <a href="#/nave/plan/REC-1184">Plan de estiba de REC-1184</a>: ${insig('Marcado para replanificar', 'error')}</li></ul>
+      <ul class="lista-simple"><li>${ic('correo')} Aviso a ${esc(v.cliente)} y a ${esc(v.agencia)}: ${horaV(v, 'masa')}</li><li>${ic('nave')} ${enlaceSi('#/nave/plan/REC-1184', 'Plan de estiba de REC-1184')}: ${insig('Marcado para replanificar', 'error')}</li></ul>
       ${v.respuestaEmbarcador ? msj('info', 'El embarcador corrigió la masa bruta verificada', `Nueva masa declarada: ${kgs(v.masaMed)}, firmada a las ${horaV(v, 'barrera')}.`) + btn('Continuar con la masa corregida', { tipo: 'clave', acc: 'v-masa-continuar', arg: v.id, id: 'b-paso' }) : btn('Simular la respuesta del embarcador', { tipo: 'secundario', acc: 'v-masa-respuesta', arg: v.id, id: 'b-paso' })}`;
     return `${cabPaso(v, 3)}${pesado ? tablaMasa(v) : `<p>Masa bruta verificada declarada: <strong>${kgs(v.masaDecl)}</strong>. La báscula del puesto ${v.carril} pesa el camión con el contenedor y descuenta la tara registrada.</p>`}
       ${btn('Pesar en la báscula', { tipo: 'clave', acc: 'v-pesar', arg: v.id, ic: 'balanza', id: 'b-paso' })}`;
@@ -124,7 +134,7 @@ function panelFin(v) {
   const est = v.estadia;
   return `<p class="etiqueta">Visita terminada</p><h2 id="t-paso" tabindex="-1">Salida registrada</h2>${msj(est <= 45 ? 'ok' : 'aviso', `Estadía de ${est} minutos`, est <= 45 ? 'Dentro de la meta de 45 minutos del contrato de concesión.' : 'Sobre la meta de 45 minutos: queda trazada para el análisis de causas.')}
     ${progreso(est, 45, 'Estadía respecto de la meta de 45 minutos', { texto: `${est} / 45 min`, alerta: est > 45 })}
-    <ul class="lista-simple" style="margin-top:12px"><li><a href="#/contenedor/${compacto(v.cont)}">Ficha del contenedor</a>: posición ${textoPos(v.posicion)}</li><li><a href="#/evidencia/hechos">Hechos facturables generados</a>: pesaje e inicio del almacenaje</li><li><a href="#/documentos">Conformidad de recepción</a> generada desde plantilla y lista para firma</li><li><a href="#/gate/estadia">Estadía de los camiones del turno</a></li></ul>`;
+    <ul class="lista-simple" style="margin-top:12px"><li><a href="#/contenedor/${compacto(v.cont)}">Ficha del contenedor</a>: posición ${textoPos(v.posicion)}</li><li>${enlaceSi('#/evidencia/hechos', 'Hechos facturables generados')}: pesaje e inicio del almacenaje</li><li>${enlaceSi('#/documentos', 'Conformidad de recepción')} generada desde plantilla y lista para firma</li><li><a href="#/gate/estadia">Estadía de los camiones del turno</a></li></ul>`;
 }
 ACC['v-ver-paso'] = (el) => { const v = visitaPorId(rutaActual().params.id); (E.ui.verPaso ||= {})[v.id] = el.dataset.arg === 'actual' ? null : Number(el.dataset.arg); refrescar(); $('#t-paso')?.focus(); };
 function avanzar(v, i, fuente) { v.paso = i + 1; v.eventos.filter((e) => e.paso == null).forEach((e) => { e.paso = i; }); (E.ui.verPaso ||= {})[v.id] = null; anunciar(`Estado: ${estadoVisita(v)}`); refrescar(); $('#t-paso')?.focus(); }
@@ -133,13 +143,14 @@ FORM['v-cita'] = (f) => {
   if (v.franja != null && v.cita) { E.db.franjas[v.franja].res--; }
   v.franja = fr.i; fr.res++;
   let c = E.db.citas.find((x) => x.visita === v.id); if (!c) { c = { id: 'CIT-' + (51300 + E.db.citas.length), transporte: v.transporte, patente: v.patente, cont: v.cont, naviera: v.naviera, tipo: 'Entrega de exportación', tresBandas: false, visita: v.id }; E.db.citas.push(c); }
-  c.franja = fr.i; c.estado = 'Confirmada'; v.cita = c.id;
+  c.franja = fr.i; c.estado = 'Confirmada'; v.cita = c.id; E.ui.tablas.citas = { orden: 'hora', dir: 1, pagina: 1, q: v.patente, f: {}, sel: [] }; // al abrir las citas, se ve la recién confirmada
   v.eventos = v.eventos.filter((e) => e.hecho !== 'cita'); evento(v, 'cita', `Cita ${c.id} confirmada para ${textoFranja(fr)}`, `Portal de clientes · ${v.transporte}`, 'destacado');
   auditar('Cita confirmada', `${c.id} · ${v.patente}`); notificar(`Cita ${c.id} confirmada: ${v.patente} a las ${hm(fr.ini)}`, '#/gate/visita/' + v.id, ['gate', 'supervisor', 'transporte', 'conductor']);
-  aviso(`Cita ${c.id} confirmada. Ya aparece en las citas del gate y en el puesto de atención.`, '', { href: '#/gate/citas', enlace: 'Ver citas' }); avanzar(v, 0);
+  aviso(`Cita ${c.id} confirmada. Ya aparece en las citas del día.`, '', puedeIr('#/gate/citas') ? { href: '#/gate/citas', enlace: 'Ver citas' } : {}); avanzar(v, 0);
 };
 FORM['v-docs'] = async (f) => {
   const v = visitaPorId(f.dataset.arg); const b = $('#b-paso'); if (!validarForm(f)) return;
+  const vg = $('#v-vgm', f); if (vg) v.masaDecl = Number(vg.value.replace(/[.\s]/g, ''));
   b.setAttribute('aria-busy', 'true'); b.disabled = true; await new Promise((r) => setTimeout(r, 600));
   for (const k of ['guia', 'aduana', 'vgm']) if ((ARCHIVOS[`doc-${v.id}-${k}`] || []).length) v.docs[k] = 'ok';
   v.resultadoDocs = true; const faltan = Object.entries(v.docs).filter(([, x]) => x !== 'ok').map(([k]) => k);
@@ -156,8 +167,9 @@ ACC['v-llega-sin'] = (el) => {
 };
 ACC['v-exc-resolver'] = (el) => resolverExcepcion(visitaPorId(el.dataset.arg));
 function resolverExcepcion(v) {
-  v.docs.aduana = 'ok'; v.excepcion = null; v.retraso = (v.retraso || 0) + 10; v.paso = Math.max(v.paso, 2);
+  v.docs.aduana = 'ok'; v.excepcion = null; v.paso = Math.max(v.paso, 2);
   evento(v, 'docCargado', 'La agencia cargó la autorización aduanera; ATOS la validó', `Portal de clientes · ${v.agencia}`); evento(v, 'vuelveFila', `Vuelve a la fila conservando su franja ${textoFranja(franjaDe(v))}`, 'ATOS', 'destacado');
+  v.retraso = (v.retraso || 0) + 10;
   v.paso = 2; v.eventos.filter((e) => e.paso == null).forEach((e) => { e.paso = 1; });
   E.db.tareas.filter((t) => t.t.includes(v.cont) && t.proceso === 'Documentación').forEach((t) => { t.hecha = true; }); E.db.tareas.filter((t) => t.id === 'TA-1').forEach((t) => { t.hecha = true; });
   notificar(`${v.patente} volvió a la fila del gate conservando su franja`, '#/gate/visita/' + v.id, ['gate', 'supervisor', 'carga']); auditar('Excepción documental resuelta', v.id); aviso('Documento validado: el camión vuelve a la fila con su franja.'); refrescar(); $('#t-paso')?.focus();
@@ -186,7 +198,7 @@ ACC['v-pesar'] = (el) => {
     auditar('Masa bruta sobre la tolerancia', v.cont, 'Avance detenido'); aviso(`Diferencia de ${num(dif, 1)} %: avance detenido y plan de estiba marcado.`, 'error'); refrescar(); $('#t-paso')?.focus(); return;
   }
   evento(v, 'masa', `Masa medida ${kgs(v.masaMed)}: diferencia de ${num(dif, 1)} %, dentro de la tolerancia`, `Báscula del puesto ${v.carril}`); evento(v, 'masa', 'Hecho facturable generado: pesaje', 'Servicio de Evidencia');
-  aviso('Masa verificada. Se generó el hecho facturable del pesaje.', '', { href: '#/evidencia/hechos', enlace: 'Ver evidencia' }); avanzar(v, 3);
+  aviso('Masa verificada. Se generó el hecho facturable del pesaje.', '', puedeIr('#/evidencia/hechos') ? { href: '#/evidencia/hechos', enlace: 'Ver evidencia' } : {}); avanzar(v, 3);
 };
 ACC['v-masa-respuesta'] = (el) => { const v = visitaPorId(el.dataset.arg); v.respuestaEmbarcador = true; evento(v, 'barrera', `${v.cliente} firmó una masa bruta verificada corregida de ${kgs(v.masaMed)}`, `Portal de clientes · ${v.agencia}`); refrescar(); $('#b-paso')?.focus(); };
 ACC['v-masa-continuar'] = (el) => { const v = visitaPorId(el.dataset.arg); v.masaDecl = v.masaMed; v.excepcion = null; evento(v, 'barrera', 'Masa verificada con la declaración corregida', 'ATOS'); avanzar(v, 3); };
@@ -195,7 +207,7 @@ ACC['v-barrera'] = async (el) => {
   const ok = await confirmar({ titulo: 'Abrir barrera', critico: true, texto: 'La barrera se abre y queda registrada la entrada al patio. Confirma que el camión y el contenedor son los de la pantalla.', detalle: datos([['Camión', `<span class="codigo">${v.patente}</span>`], ['Contenedor', `<span class="codigo">${v.cont}</span>`], ['Destino', textoPos(pos)]]), si: 'Abrir barrera' });
   if (!ok) { anunciar('La barrera sigue cerrada.'); return; }
   v.posicion = pos; evento(v, 'destino', `Destino asignado: ${textoPos(pos)}`, 'ATOS · asignación algorítmica'); evento(v, 'barrera', 'Barrera abierta; entrada al patio registrada', `Funcionaria de gate, puesto ${v.carril}`, 'destacado');
-  E.db.cabina.instruccion = { cont: v.cont, pos, tracto: 'el camión ' + v.patente, eta: 3 }; acumularELC(1); auditar('Apertura de barrera', `${v.patente} · ${v.cont}`); aviso('Barrera abierta. La instrucción llegó a la app del conductor y a la cabina de la grúa ' + v.rtg + '.', '', { href: '#/cabina/patio', enlace: 'Ver la cabina' }); avanzar(v, 4);
+  E.db.cabina.instruccion = { cont: v.cont, pos, tracto: 'el camión ' + v.patente, eta: 3 }; acumularELC(1); auditar('Apertura de barrera', `${v.patente} · ${v.cont}`); aviso('Barrera abierta. La instrucción llegó a la app del conductor y a la cabina de la grúa ' + v.rtg + '.', '', puedeIr('#/cabina/patio') ? { href: '#/cabina/patio', enlace: 'Ver la cabina' } : {}); avanzar(v, 4);
 };
 ACC['v-posicion'] = (el) => {
   const v = visitaPorId(el.dataset.arg); E.ui.moviendo = v.id; refrescar();
@@ -208,15 +220,15 @@ ACC['v-posicion'] = (el) => {
   }, 1000);
 };
 ACC['v-salida'] = (el) => {
-  const v = visitaPorId(el.dataset.arg); const f = franjaDe(v); v.estadia = OFF.salida - OFF.llegada + (v.retraso || 0) + (v.excepcion ? 0 : 0) + (v.sinValidar ? 0 : 0);
+  const v = visitaPorId(el.dataset.arg); const f = franjaDe(v); v.estadia = OFF.salida - OFF.llegada + (v.retraso || 0);
   evento(v, 'salida', `Salida registrada; estadía de ${v.estadia} minutos frente a la meta de 45`, 'Puesto de salida 3', 'destacado');
   E.db.estadias.unshift({ id: v.id, patente: v.patente, cont: v.cont, naviera: v.naviera, transporte: v.transporte, entrada: f.ini + OFF.llegada + (v.retraso || 0), salida: f.ini + OFF.salida + (v.retraso || 0), estadia: v.estadia, puesto: v.carril, excepcion: v.sinValidar ? 'Documentación' : '', tipo: 'Exportación' });
-  E.db.documentos.unshift({ id: 'DOC-' + (55130 + E.db.documentos.length), n: `Conformidad de recepción ${v.id}`, tipo: 'Conformidad de recepción', version: 1, autor: 'ATOS (desde plantilla DT-02 v2)', fecha: `lunes 6, ${horaV(v, 'salida')}`, etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' });
+  E.db.documentos.unshift({ id: 'DOC-' + (55130 + E.db.documentos.length), n: `Conformidad de recepción ${v.id}`, tipo: 'Conformidad de recepción', version: 1, autor: 'ATOS (desde plantilla DT-02 v2)', fecha: `miércoles 6, ${horaV(v, 'salida')}`, etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' });
   const c = E.db.citas.find((x) => x.visita === v.id); if (c) c.estado = 'Completada'; acumularELC(1); auditar('Salida registrada', `${v.patente} · estadía ${v.estadia} min`); avanzar(v, 6);
 };
-ACC['v-modificar'] = (el) => { const v = visitaPorId(el.dataset.arg); if (v.paso > 2) { aviso('La cita ya no se puede modificar: el camión entró al gate.', 'error'); return; } v.paso = 0; E.ui.verPaso = {}; aviso('Elige la nueva franja. La anterior se libera al confirmar.'); refrescar(); $('#t-paso')?.focus(); };
+ACC['v-modificar'] = (el) => { const v = visitaPorId(el.dataset.arg); if (v.excepcion) { aviso('El camión está en el carril de excepción: primero se resuelve el documento.', 'error'); return; } if (v.paso > 2) { aviso('La cita ya no se puede modificar: el camión entró al gate.', 'error'); return; } v.paso = 0; E.ui.verPaso = {}; aviso('Elige la nueva franja. La anterior se libera al confirmar.'); refrescar(); $('#t-paso')?.focus(); };
 ACC['v-cancelar'] = async (el) => {
-  const v = visitaPorId(el.dataset.arg); if (v.paso > 2) { aviso('La cita ya no se puede cancelar: el camión entró al gate.', 'error'); return; } if (v.franja == null || !v.paso) { aviso('Esta visita todavía no tiene una cita confirmada.', 'error'); return; }
+  const v = visitaPorId(el.dataset.arg); if (v.excepcion) { aviso('El camión está en el carril de excepción: primero se resuelve el documento.', 'error'); return; } if (v.paso > 2) { aviso('La cita ya no se puede cancelar: el camión entró al gate.', 'error'); return; } if (v.franja == null || !v.paso) { aviso('Esta visita todavía no tiene una cita confirmada.', 'error'); return; }
   const ok = await confirmar({ titulo: 'Cancelar la cita', critico: true, texto: `Se cancela la cita de ${v.patente} para ${textoFranja(franjaDe(v))} y se libera el cupo. El camión necesitará una cita nueva.`, si: 'Cancelar la cita', no: 'Mantener la cita' });
   if (!ok) return; E.db.franjas[v.franja].res--; const c = E.db.citas.find((x) => x.visita === v.id); if (c) c.estado = 'Cancelada'; v.eventos.push({ hora: hm(642), t: 'Cita cancelada; cupo liberado', fuente: 'Portal de clientes', paso: 0, clase: 'alarma' });
   v.paso = 0; v.franja = null; auditar('Cita cancelada', c?.id || v.id); aviso('Cita cancelada y cupo liberado.'); refrescar();
@@ -243,7 +255,7 @@ ACC['r-avanzar'] = (el) => {
   const v = visitaPorId(el.dataset.arg); const f = franjaDe(v); const t = (m) => hm(f.ini + m);
   const ev = [['Cita de retiro confirmada', 'Portal de clientes', -40], ['Liberación aduanera y de la naviera verificadas', 'Hub de Integración · Aduana y naviera', -10], ['Entrada al gate; patente y conductor verificados', `Lector de patente, puesto 5`, 3], [`Contenedor cargado al camión desde ${textoPos(v.posicion)}`, 'Telemetría de RTG-11', 15], ['Salida registrada; lectura óptica confirma el contenedor', 'Puesto de salida 2', 31]][v.paso];
   v.eventos.push({ hora: t(ev[2]), t: ev[0], fuente: ev[1], clase: v.paso === 4 ? 'destacado' : '' });
-  if (v.paso === 4) { v.estadia = 28; E.db.estadias.unshift({ id: v.id, patente: v.patente, cont: v.cont, naviera: v.naviera, transporte: v.transporte, entrada: f.ini + 3, salida: f.ini + 31, estadia: 28, puesto: 5, excepcion: '', tipo: 'Importación' }); E.db.documentos.unshift({ id: 'DOC-' + (55160 + E.db.documentos.length), n: `Conformidad de entrega ${v.id}`, tipo: 'Conformidad de entrega', version: 1, autor: 'ATOS (desde plantilla DT-03 v2)', fecha: 'lunes 6, ' + t(31), etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' }); }
+  if (v.paso === 4) { v.estadia = 28; E.db.estadias.unshift({ id: v.id, patente: v.patente, cont: v.cont, naviera: v.naviera, transporte: v.transporte, entrada: f.ini + 3, salida: f.ini + 31, estadia: 28, puesto: 5, excepcion: '', tipo: 'Importación' }); E.db.documentos.unshift({ id: 'DOC-' + (55160 + E.db.documentos.length), n: `Conformidad de entrega ${v.id}`, tipo: 'Conformidad de entrega', version: 1, autor: 'ATOS (desde plantilla DT-03 v2)', fecha: 'miércoles 6, ' + t(31), etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' }); }
   v.paso++; acumularELC(1); auditar('Retiro de importación: ' + PASOS_IMP[v.paso - 1].est, v.id); anunciar('Estado: ' + estadoVisita(v)); refrescar(); $('#t-paso')?.focus();
 };
 R('/gate/retiro/:id', { id: 'gate-retiro-id', t: (p) => `Retiro ${p.id}`, area: 'gate.flujo', mod: 'gate', padre: 'gate-retiro', rf: ['RF-GAT-02', 'RF-GAT-11', 'RF-GAT-12', 'RF-PAT-05'], vista: (p) => { const v = visitaPorId(p.id); return v ? vistaRetiro(v) : vistaInexistente('visita', p.id); } });
@@ -257,11 +269,11 @@ R('/gate/retiros', {
 R('/gate/puesto', {
   id: 'gate-puesto', t: 'Puesto de atención', area: 'gate', mod: 'gate', ic: 'barrera', rf: ['RF-GAT-02', 'RF-GAT-05', 'RF-GAT-06', 'RF-GAT-07', 'RF-GAT-15'], carga: true,
   vista: () => {
-    const enCola = E.db.visitas.filter((v) => v.paso >= 1 && v.paso < 5 && v.excepcion !== 'doc');
-    const filas = [...enCola.map((v) => ({ id: v.id, patente: v.patente, cont: v.cont, franja: textoFranja(franjaDe(v)), prioridad: 'Cita cumplida', estado: estadoVisita(v), puesto: v.carril, href: '#/gate/visita/' + v.id })),
+    const enCola = E.db.visitas.filter((v) => v.paso >= 2 && v.paso < 5 && v.excepcion !== 'doc');
+    const filas = [...enCola.map((v) => ({ id: v.id, patente: v.patente, cont: v.cont, franja: textoFranja(franjaDe(v)), prioridad: v.paso >= 3 ? 'Cita cumplida' : 'Con cita, por llegar', estado: estadoVisita(v), puesto: v.carril, href: '#/gate/visita/' + v.id })),
       ...[['DPKR-17', 'Sin cita', 'Sin cita: espera', 1], ['LBVT-90', 'Llegó 30 min tarde', 'En fila', 3], ['XYCW-55', 'Cita cumplida', 'En fila', 7]].map(([pa, pr, es, pu], k) => ({ id: 'EXT-' + k, patente: pa, cont: codigoISO(['MCSU', 'PMLU', 'OANU'][k], String(201300 + k * 77)), franja: '10:00 – 10:30', prioridad: pr, estado: es, puesto: pu, href: '' }))];
     return `${encabezado('Puesto de atención', 'Fila del gate por prioridad: primero quien cumple su cita. Los camiones con documentación incompleta van al carril de excepción.', btn('Carril de excepción', { href: '#/gate/excepcion', tipo: 'secundario', ic: 'alerta' }) + btn('Ingreso guiado de exportación', { href: '#/gate/visita/VIS-240871', tipo: 'clave', ic: 'camion' }))}
-      <div class="reticula r4" style="margin-bottom:16px">${kpi('Camiones en la fila', filas.length, 'en los 8 puestos de entrada')}${kpi('En carril de excepción', E.db.visitas.filter((v) => v.excepcion === 'doc').length + 2, 'no ocupan puesto', '#/gate/excepcion')}${kpi('Conciliación con el TOS 2012', '0', 'divergencias en el gate (umbral cero)', '#/convivencia')}${kpi('Procesamiento por camión', '96 s', 'de la barrera a la instrucción de destino')}</div>
+      <div class="reticula r4" style="margin-bottom:16px">${kpi('Camiones en la fila', filas.length, 'en los 8 puestos de entrada')}${kpi('En carril de excepción', enExcepcion(), 'no ocupan puesto', '#/gate/excepcion')}${kpi('Conciliación con el TOS 2012', '0', 'divergencias en el gate (umbral cero)', '#/convivencia')}${kpi('Procesamiento por camión', '96 s', 'de la barrera a la instrucción de destino')}</div>
       ${tabla({ id: 'puesto', titulo: 'Fila del gate', filas, ordenInicial: 'prioridad', exportar: false, columnas: [{ k: 'patente', t: 'Camión', html: (f) => `<span class="codigo">${f.patente}</span>` }, { k: 'cont', t: 'Contenedor', html: (f) => `<span class="codigo">${f.cont}</span>` }, { k: 'franja', t: 'Franja' }, { k: 'prioridad', t: 'Prioridad', o: (f) => (f.prioridad === 'Cita cumplida' ? 0 : 1), html: (f) => insig(f.prioridad, f.prioridad === 'Cita cumplida' ? 'ok' : 'aviso') }, { k: 'puesto', t: 'Puesto', n: true }, { k: 'estado', t: 'Estado' }, { k: 'a', t: 'Acción', orden: false, html: (f) => (f.href ? `<a class="boton secundario chico" href="${f.href}">Atender</a>` : `<span class="detalle">En espera</span>`) }] })}`;
   },
 });
@@ -271,7 +283,7 @@ R('/gate/excepcion', {
     const vs = E.db.visitas.filter((v) => v.excepcion === 'doc');
     const filas = [...vs.map((v) => ({ id: v.id, patente: v.patente, cont: v.cont, falta: 'Autorización aduanera de exportación', agencia: v.agencia, aviso: horaV(v, 'excepcion'), franja: textoFranja(franjaDe(v)), href: '#/gate/visita/' + v.id })),
       { id: 'EX-1', patente: 'RJVB-31', cont: codigoISO('CHNU', '510882'), falta: 'Guía de despacho', agencia: 'Agencia Litoral Central', aviso: '10:31', franja: '10:00 – 10:30', href: '' }, { id: 'EX-2', patente: 'SFKT-08', cont: codigoISO('NVCU', '233410'), falta: 'Masa bruta verificada declarada', agencia: 'Agencia de Aduanas Puerto Claro', aviso: '10:37', franja: '10:30 – 11:00', href: '' }];
-    return `${encabezado('Carril de excepción', 'El 22 % de los camiones llegaba con documentación incompleta u errónea y ocupaba un puesto del gate. Aquí esperan sin ocuparlo, con su franja conservada, mientras la agencia sube el documento.')}
+    return `${encabezado('Carril de excepción', 'El 22 % de los camiones llegaba con documentación incompleta o errónea y ocupaba un puesto del gate. Aquí esperan sin ocuparlo, con su franja conservada, mientras la agencia sube el documento.')}
       ${tabla({ id: 'excepcion', titulo: 'Camiones en el carril de excepción', filas, exportar: false, columnas: [{ k: 'patente', t: 'Camión', html: (f) => `<span class="codigo">${f.patente}</span>` }, { k: 'cont', t: 'Contenedor', html: (f) => `<span class="codigo">${f.cont}</span>` }, { k: 'falta', t: 'Documento faltante' }, { k: 'agencia', t: 'Agencia avisada' }, { k: 'aviso', t: 'Aviso' }, { k: 'franja', t: 'Franja conservada' }, { k: 'a', t: 'Acción', orden: false, html: (f) => (f.href ? `<a class="boton secundario chico" href="${f.href}">Atender</a>` : '<span class="detalle">Esperando a la agencia</span>') }], vacioT: 'Carril de excepción vacío' })}`;
   },
 });
@@ -281,12 +293,22 @@ R('/gate/citas', {
     ${tabla({ id: 'citas', titulo: 'Citas del día', filas: E.db.citas.map((c) => ({ ...c, hora: hm(E.db.franjas[c.franja].ini) })), ordenInicial: 'hora', porPagina: 12, ctx: (k) => [{ t: 'Ver la visita', href: E.db.citas.find((c) => c.id === k)?.visita ? '#/gate/visita/' + E.db.citas.find((c) => c.id === k).visita : '#/gate/puesto', ic: 'ojo' }, { t: 'Reprogramar a la siguiente franja', acc: 'cita-reprog', arg: k, ic: 'reloj' }, { t: 'Cancelar', acc: 'cita-cancelar', arg: k, ic: 'cerrar' }],
       columnas: [{ k: 'id', t: 'Cita' }, { k: 'hora', t: 'Franja', v: (f) => `${f.hora} – ${hm(E.db.franjas[f.franja].fin)}` }, { k: 'patente', t: 'Camión', html: (f) => `<span class="codigo">${f.patente}</span>` }, { k: 'cont', t: 'Contenedor', html: (f) => `<span class="codigo">${f.cont}</span>` }, { k: 'transporte', t: 'Empresa de transporte' }, { k: 'tipo', t: 'Tipo' }, { k: 'estado', t: 'Estado', html: (f) => insigCita(f.estado) + (f.tresBandas ? ' ' + insig('A tres bandas', 'info') : '') }, { k: 'acc', t: 'Acciones', orden: false, noCSV: true, html: (f) => menuAcciones('Acciones', [{ t: 'Reprogramar', acc: 'cita-reprog', arg: f.id, ic: 'reloj' }, { t: 'Cancelar', acc: 'cita-cancelar', arg: f.id, ic: 'cerrar' }], { id: 'mc-' + f.id, clase: 'boton-icono', soloIcono: true }) }],
       filtros: [{ k: 'estado', t: 'Estado' }, { k: 'tipo', t: 'Tipo' }, { k: 'transporte', t: 'Empresa' }],
-      masivas: [{ t: 'Reprogramar a la siguiente franja', confirmar: 'Las citas seleccionadas pasan a la siguiente franja con cupo y se avisa a cada empresa', fn: (ids) => { ids.forEach(reprogramar); aviso(`${ids.length} citas reprogramadas y avisadas.`); } }, { t: 'Cancelar', critico: true, confirmar: 'Se cancelan las citas seleccionadas y se liberan sus cupos', fn: (ids) => { ids.forEach((id) => { const c = E.db.citas.find((x) => x.id === id); c.estado = 'Cancelada'; E.db.franjas[c.franja].res--; }); aviso(`${ids.length} citas canceladas.`); } }] })}
+      masivas: [{ t: 'Reprogramar a la siguiente franja', confirmar: 'Las citas seleccionadas pasan a la siguiente franja con cupo y se avisa a cada empresa', fn: (ids) => { const ok = ids.filter(reprogramar).length; aviso(ok === ids.length ? `${ok} citas reprogramadas y avisadas.` : `${ok} de ${ids.length} citas reprogramadas; las demás ya no se pueden cambiar.`, ok === ids.length ? '' : 'error'); } }, { t: 'Cancelar', critico: true, confirmar: 'Se cancelan las citas seleccionadas y se liberan sus cupos', fn: (ids) => { const ok = ids.filter((id) => cancelarCita(E.db.citas.find((x) => x.id === id))).length; aviso(ok === ids.length ? `${ok} citas canceladas.` : `${ok} de ${ids.length} citas canceladas; las demás ya no se pueden cambiar.`, ok === ids.length ? '' : 'error'); } }] })}
     ${fab('Nueva cita', { href: '#/gate/citas/nueva' })}`,
 });
-function reprogramar(id) { const c = E.db.citas.find((x) => x.id === id); const sig = E.db.franjas.find((f) => f.i > c.franja && f.res < f.cap); if (!sig) return; E.db.franjas[c.franja].res--; sig.res++; c.franja = sig.i; c.estado = 'Reprogramada'; auditar('Cita reprogramada', id); }
-ACC['cita-reprog'] = (el) => { reprogramar(el.dataset.arg); aviso(`Cita ${el.dataset.arg} reprogramada a la siguiente franja con cupo.`); refrescar(); };
-ACC['cita-cancelar'] = async (el) => { const c = E.db.citas.find((x) => x.id === el.dataset.arg); if (!(await confirmar({ titulo: `Cancelar la cita ${c.id}`, critico: true, texto: `Se libera el cupo de ${c.patente}.`, si: 'Cancelar la cita', no: 'Mantener' }))) return; c.estado = 'Cancelada'; E.db.franjas[c.franja].res--; auditar('Cita cancelada', c.id); aviso('Cita cancelada.'); refrescar(); };
+function reprogramar(id) {
+  const c = E.db.citas.find((x) => x.id === id); if (citaBloqueada(c)) return false; const sig = E.db.franjas.find((f) => f.i > c.franja && f.res < f.cap); if (!sig) return false;
+  E.db.franjas[c.franja].res--; sig.res++; c.franja = sig.i; c.estado = 'Reprogramada';
+  const v = c.visita ? visitaPorId(c.visita) : null; if (v && v.franja != null) { v.franja = sig.i; v.eventos.push({ hora: horaSim(), t: `Cita ${c.id} reprogramada a ${textoFranja(sig)}`, fuente: 'Gate', paso: 0, clase: '' }); }
+  auditar('Cita reprogramada', id); return true;
+}
+function cancelarCita(c) {
+  if (citaBloqueada(c)) return false; c.estado = 'Cancelada'; E.db.franjas[c.franja].res--;
+  const v = c.visita ? visitaPorId(c.visita) : null; if (v && v.franja != null) { v.franja = null; v.paso = 0; v.eventos.push({ hora: horaSim(), t: 'Cita cancelada; cupo liberado', fuente: 'Gate', paso: 0, clase: 'alarma' }); }
+  auditar('Cita cancelada', c.id); return true;
+}
+ACC['cita-reprog'] = (el) => { const c = E.db.citas.find((x) => x.id === el.dataset.arg); const no = citaBloqueada(c); if (no) { aviso(no, 'error'); return; } const ok = reprogramar(c.id); aviso(ok ? `Cita ${c.id} reprogramada a la siguiente franja con cupo.` : 'No quedan franjas con cupo después de esta.', ok ? '' : 'error'); refrescar(); };
+ACC['cita-cancelar'] = async (el) => { const c = E.db.citas.find((x) => x.id === el.dataset.arg); const no = citaBloqueada(c); if (no) { aviso(no, 'error'); return; } if (!(await confirmar({ titulo: `Cancelar la cita ${c.id}`, critico: true, texto: `Se libera el cupo de ${c.patente}.`, si: 'Cancelar la cita', no: 'Mantener' }))) return; cancelarCita(c); aviso('Cita cancelada y cupo liberado.'); refrescar(); };
 R('/gate/citas/nueva', {
   id: 'gate-cita-nueva', t: ['Nueva cita', 'New appointment'], area: ['gate', 'portal.citas'], bilingue: true, mod: () => (PERFILES[E.sesion?.perfil]?.ext ? 'portal' : 'gate'), padre: () => (PERFILES[E.sesion?.perfil]?.ext ? 'portal-citas' : 'gate-citas'), rf: ['RF-GAT-01', 'RF-GAT-16', 'RF-INT-08'],
   vista: () => {
@@ -310,8 +332,8 @@ FORM['nueva-cita'] = (f) => {
   if (n.paso === 2) {
     d.pat = validarPatente($('#nc-pat').value).codigo; d.rut = $('#nc-rut').value; d.emp = $('#nc-emp').value; const fr = E.db.franjas[d.franja]; fr.res++;
     const c = { id: 'CIT-' + (51300 + E.db.citas.length), franja: d.franja, transporte: d.emp, patente: d.pat, cont: d.cont, naviera: (NAVIERAS.find((x) => d.cont.startsWith(x.pref)) || NAVIERAS[0]).id, tipo: d.tipo, estado: 'Confirmada', tresBandas: false, nueva: true };
-    E.db.citas.push(c); auditar('Cita creada', `${c.id} · ${c.patente}`); notificar(`Nueva cita ${c.id}: ${c.patente} a las ${hm(fr.ini)}`, '#/gate/citas', ['gate', 'supervisor']); E.ui.nuevaCita = null; E.ui.tablas.citas = null;
-    aviso(`Cita ${c.id} confirmada para ${hm(fr.ini)}. Ya está en la lista y en el puesto de atención.`); ir(PERFILES[E.sesion.perfil].ext ? '#/portal/citas' : '#/gate/citas'); return;
+    E.db.citas.push(c); auditar('Cita creada', `${c.id} · ${c.patente}`); notificar(`Nueva cita ${c.id}: ${c.patente} a las ${hm(fr.ini)}`, '#/gate/citas', ['gate', 'supervisor']); E.ui.nuevaCita = null; E.ui.tablas.citas = { orden: 'hora', dir: 1, pagina: 1, q: c.patente, f: {}, sel: [] };
+    aviso(`Cita ${c.id} confirmada para ${hm(fr.ini)}. Ya está en la lista de citas del día.`); ir(PERFILES[E.sesion.perfil].ext ? '#/portal/citas' : '#/gate/citas'); return;
   }
   n.paso++; refrescar(); $('#titulo-pagina').focus();
 };
@@ -322,7 +344,7 @@ R('/gate/estadia', {
   vista: (p, q) => {
     const es = E.db.estadias; const prom = Math.round(es.reduce((s, x) => s + x.estadia, 0) / es.length); const porHora = {};
     es.forEach((x) => { const h = hm(Math.floor(x.entrada / 60) * 60); (porHora[h] ||= []).push(x.estadia); });
-    if (q.v) setTimeout(() => ACC['estadia-ver']({ dataset: { arg: q.v } }), 50);
+    if (q.v) setTimeout(() => { history.replaceState(null, '', '#/gate/estadia'); ACC['estadia-ver']({ dataset: { arg: q.v } }); }, 50);
     return `${encabezado('Estadía por camión', `Desde la entrada hasta la salida de cada camión. Promedio del turno: ${prom} minutos; meta del contrato: 45 (línea base: 78).`)}
       <div class="tarjeta" style="margin-bottom:16px">${gBarras({ titulo: 'Estadía promedio por hora de entrada (minutos)', datos: Object.entries(porHora).map(([h, xs]) => ({ e: h, v: Math.round(xs.reduce((a, b) => a + b, 0) / xs.length) })), meta: 45, unidad: 'min' })}</div>
       ${tabla({ id: 'estadias', titulo: 'Visitas cerradas del turno', filas: es, ordenInicial: 'estadia', dirInicial: -1, porPagina: 10, columnas: [{ k: 'id', t: 'Visita', html: (f) => `<button type="button" class="enlace" data-acc="estadia-ver" data-arg="${f.id}">${f.id}</button>` }, { k: 'patente', t: 'Camión', html: (f) => `<span class="codigo">${f.patente}</span>` }, { k: 'cont', t: 'Contenedor', html: (f) => `<span class="codigo">${f.cont}</span>` }, { k: 'transporte', t: 'Empresa' }, { k: 'entrada', t: 'Entrada', v: (f) => hm(f.entrada) }, { k: 'salida', t: 'Salida', v: (f) => hm(f.salida) }, { k: 'estadia', t: 'Estadía (min)', n: true, html: (f) => `${f.estadia} ${f.estadia > 45 ? insig('Sobre 45', 'aviso') : ''}` }, { k: 'excepcion', t: 'Excepción', v: (f) => f.excepcion || '—' }], filtros: [{ k: 'tipo', t: 'Tipo' }, { k: 'transporte', t: 'Empresa' }] })}`;

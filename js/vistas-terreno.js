@@ -106,7 +106,7 @@ R('/cabina/patio', {
     return `<div class="cab-barra"><h1 tabindex="-1" id="titulo-pagina">RTG-07 · Bloque C</h1><span>${esc(PERSONAS.operador_patio.n)}</span><span>${ic(sinCob ? 'sinsenal' : 'senal')} ${sinCob ? `Sin cobertura · ${buf} registros guardados en el equipo` : 'Cobertura inalámbrica normal'}</span><span class="espacio" style="flex:1"></span><a href="#/inicio">Salir de la cabina</a></div>
       <div class="instruccion" aria-live="polite">
         <div class="caja-cab blanca"><p class="etiqueta">${ins.sig ? 'Siguiente instrucción' : 'Instrucción vigente'}</p>
-          <p class="medio">${ins.sig ? 'LEVANTAR desde' : 'LEVANTAR desde'} ${ins.sig ? `C-12-02-${ins.pos.alt}` : esc(ins.tracto)}</p>
+          <p class="medio">LEVANTAR desde ${ins.sig ? `C-12-02-${ins.pos.alt}` : esc(ins.tracto)}</p>
           <p class="gigante">${ins.cont}</p>
           <p class="medio">DEPOSITAR en ${ins.sig ? esc(ins.tracto) : `Bloque ${ins.pos.b} · Bahía ${ins.pos.bahia} · Fila ${ins.pos.fila} · Altura ${ins.pos.alt}`}</p>
           <p class="medio">${ins.sig ? 'Tractocamión TC-15' : 'Camión ' + esc(ins.tracto.replace('el camión ', ''))} llega en ${ins.eta} min</p></div>

@@ -112,7 +112,7 @@ h1 .codigo, h2 .codigo, h3 .codigo { font-family: var(--f-texto); font-size: .82
 .migas ol { list-style: none; display: flex; flex-wrap: wrap; gap: var(--e1); margin: 0 0 var(--e3); padding: 0; font-size: .9375rem; }
 .migas li { display: flex; align-items: center; gap: var(--e1); color: var(--indigo-2); }
 .migas li + li::before { content: '›'; color: var(--indigo-2); }
-.migas a { color: var(--indigo); display: inline-flex; align-items: center; min-height: 32px; }
+.migas a { color: var(--indigo); display: inline-flex; align-items: center; min-height: var(--toque); }
 .cabecera { display: flex; flex-wrap: wrap; gap: var(--e4); align-items: flex-end; justify-content: space-between; margin-bottom: var(--e4); position: relative; }
 .cabecera .intro { max-width: 70ch; }
 .cabecera .acciones { display: flex; flex-wrap: wrap; gap: var(--e2); }
@@ -275,13 +275,14 @@ input[type="checkbox"]:checked:disabled { background: var(--indigo-suave); borde
 .aviso-flotante { display: flex; gap: var(--e2); align-items: flex-start; background: rgba(255, 255, 255, .97); color: var(--indigo); padding: var(--e3) var(--e4); border-radius: var(--radio-m); border-left: 5px solid var(--indigo-2); box-shadow: var(--sombra-alta); animation: aparecer .2s ease-out; font-weight: 600; }
 .aviso-flotante.error { background: var(--coral-tinte); color: var(--coral-osc); border-left-color: var(--coral-osc); }
 .aviso-flotante a, .aviso-flotante button.enlace { color: inherit; }
-.aviso-flotante .cerrar-aviso { margin-left: auto; color: inherit; min-width: 32px; min-height: 32px; background: transparent; border: 1px solid transparent; border-radius: 50%; cursor: pointer; }
+.aviso-flotante .cerrar-aviso { margin-left: auto; color: inherit; min-width: var(--toque); min-height: var(--toque); background: transparent; border: 1px solid transparent; border-radius: 50%; cursor: pointer; }
 .aviso-flotante .cerrar-aviso:hover { border-color: currentColor; }
-button.enlace { background: none; border: 0; padding: 0; font: inherit; color: var(--indigo); text-decoration: underline; cursor: pointer; text-underline-offset: 3px; min-height: 24px; }
+button.enlace { background: none; border: 0; padding: 0; font: inherit; color: var(--indigo); text-decoration: underline; cursor: pointer; text-underline-offset: 3px; min-height: var(--toque); }
 
 /* información contextual emergente */
+.ctx > button::before { content: ''; position: absolute; inset: -8px; }
 .ctx { position: relative; display: inline-flex; vertical-align: middle; }
-.ctx > button { min-width: 28px; min-height: 28px; border-radius: 50%; border: 1px solid var(--indigo-2); background: var(--blanco); color: var(--indigo); cursor: help; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+.ctx > button { position: relative; min-width: 28px; min-height: 28px; border-radius: 50%; border: 1px solid var(--indigo-2); background: var(--blanco); color: var(--indigo); cursor: help; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
 .ctx > button::after { content: ''; position: absolute; inset: -8px; }
 .ctx [role="tooltip"] { position: absolute; z-index: 45; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: max-content; max-width: 280px; background: var(--indigo-3); color: var(--blanco); padding: var(--e2) var(--e3); border-radius: var(--radio-s); font-size: .875rem; font-weight: 400; line-height: 1.4; box-shadow: var(--sombra-alta); display: none; text-transform: none; letter-spacing: 0; }
 .ctx.visible [role="tooltip"] { display: block; }
@@ -303,7 +304,7 @@ thead th { background: var(--cielo-bruma); color: var(--indigo); font-weight: 70
 th.n, td.n { text-align: right; }
 tbody tr:hover { background: var(--cielo-bruma); }
 tbody tr.sel { background: var(--cielo-claro); }
-th button.orden { font: inherit; font-weight: 700; color: var(--indigo-3); background: none; border: 0; padding: 0 2px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; min-height: 32px; }
+th button.orden { font: inherit; font-weight: 700; color: var(--indigo-3); background: none; border: 0; padding: 0 2px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; min-height: var(--toque); }
 th button.orden:hover { text-decoration: underline; }
 td .boton, td .boton-icono { min-height: var(--toque); }
 .celda-check { width: 48px; }
@@ -344,7 +345,7 @@ details.datos-grafico > summary { cursor: pointer; min-height: var(--toque); dis
 .pasos li.actual::before { background: var(--accion); border-color: transparent; color: var(--blanco); box-shadow: 0 0 0 5px rgba(191, 214, 238, .8), var(--brillo); }
 .pasos li.fallo::before { content: '!'; background: var(--coral-osc); border-color: var(--coral-osc); color: var(--blanco); }
 .pasos li .est { display: block; font-size: .75rem; font-weight: 600; }
-.pasos button, .pasos a { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; min-height: 32px; padding: 0; }
+.pasos button, .pasos a { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; min-height: var(--toque); padding: 0; }
 .linea-estado { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2); margin-bottom: var(--e4); }
 .tiempo { list-style: none; margin: 0; padding: 0 0 0 var(--e4); border-left: 2px solid var(--cielo); }
 .tiempo li { position: relative; padding: 0 0 var(--e3) var(--e3); }

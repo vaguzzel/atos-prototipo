@@ -46,8 +46,8 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - Terminal de cabina RTG-07 — `#/cabina/patio`
 - Cabina de la grúa de muelle G2 — `#/cabina/grua`
 - ATOU 482913 7 — `#/contenedor/:c`
-- Ingreso de exportación REC-1184 — `#/gate/visita/:id`
-- Retiro REC-1184 — `#/gate/retiro/:id`
+- Ingreso de exportación VIS-240871 — `#/gate/visita/:id`
+- Retiro VIS-240880 — `#/gate/retiro/:id`
 
 ### Servicios transversales
 
@@ -60,7 +60,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - Firmas pendientes — `#/firma`
 - Convivencia con el TOS 2012 — `#/convivencia`
 - App de terreno: Ronda reefer y mantenimiento — `#/terreno/:perfil`
-- REC-1184 — `#/documentos/:id`
+- Instrucción de embarque IE-20871 — `#/documentos/:id`
 
 ### Patio refrigerado
 
@@ -69,7 +69,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - Evidencia de cadena de frío — `#/reefer/evidencia`
 - Certificados de integridad — `#/reefer/certificados`
 - Indicadores de alarma — `#/reefer/indicadores`
-- Tablero REC-1184 — `#/reefer/tablero/:id`
+- Tablero TR-07 — `#/reefer/tablero/:id`
 - ATOU 482913 7 — `#/reefer/contenedor/:c`
 
 ### Nave y planificación
@@ -92,8 +92,8 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - Cumplimiento de la hora acordada — `#/inspecciones/cumplimiento`
 - Energía y emisiones — `#/emisiones`
 - Reporte para el verificador — `#/emisiones/verificador`
-- Hecho REC-1184 — `#/evidencia/hecho/:id`
-- Inspección REC-1184 — `#/inspecciones/:id`
+- Hecho HF-608403 — `#/evidencia/hecho/:id`
+- Inspección INS-3307 — `#/inspecciones/:id`
 
 ### Portal e integraciones
 
@@ -108,7 +108,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - Hub de Integración — `#/hub`
 - Canal puente — `#/hub/puente`
 - Autoridades y operador ferroviario — `#/hub/autoridades`
-- Mensaje REC-1184 — `#/hub/mensaje/:id`
+- Mensaje MSG-770300 — `#/hub/mensaje/:id`
 
 ### Gestión
 
@@ -124,9 +124,9 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - Plantillas de documentos — `#/admin/documentos`
 - Retención de registros — `#/admin/retencion`
 - Auditoría — `#/admin/auditoria`
-- REC-1184 — `#/terceros/:id`
-- REC-1184 — `#/analitica/indicador/:id`
-- Evento REC-1184 — `#/admin/auditoria/:id`
+- Atlántico Austral Shipping — `#/terceros/:id`
+- Estadía del camión — `#/analitica/indicador/:id`
+- Evento AU-90011 — `#/admin/auditoria/:id`
 
 ## 2. Diagrama de navegación
 
