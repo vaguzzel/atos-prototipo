@@ -172,29 +172,29 @@ function semilla() {
   ];
   db.rondas = [{ hora: '07:30', por: 'Camila Rojas Espinoza', tableros: 'TR-01 a TR-09', obs: 'Sin novedad', canal: 'App Móvil de Terreno' }];
   db.certificados = [
-    { id: 'CF-AC-2028-0418', embarque: 'BL ATSU-77120', cont: codigoISO('PRLU', '598804'), cliente: 'Exportadora Valle Alto S.A.', carga: 'Cerezas', desde: 'sábado 2 de diciembre, 14:10', hasta: 'martes 5 de diciembre, 21:46', lecturas: 4656, desvios: 0, huella: 'b41c 9e07 52aa 03d1 77fe 1c90 6b2e d815', estado: 'Emitido' },
-    { id: 'CF-AC-2028-0419', embarque: 'BL NAPS-30981', cont: codigoISO('PRLU', '601127'), cliente: 'Frutícola Tres Cumbres S.A.', carga: 'Arándanos', desde: 'domingo 3 de diciembre, 09:02', hasta: 'miércoles 6 de diciembre, 06:15', lecturas: 4153, desvios: 1, huella: '7d02 c3e9 a1b4 5f60 08ce 92d7 33ab 1e45', estado: 'Emitido con observación' },
+    { id: 'CF-AC-2028-0418', embarque: 'BL ATSU-77120', cont: codigoISO('PRLU', '598804'), cliente: 'Exportadora Valle Alto S.A.', carga: 'Cerezas', desde: 'jueves 2 de noviembre, 14:10', hasta: 'domingo 5 de noviembre, 21:46', lecturas: 4656, desvios: 0, huella: 'b41c 9e07 52aa 03d1 77fe 1c90 6b2e d815', estado: 'Emitido' },
+    { id: 'CF-AC-2028-0419', embarque: 'BL NAPS-30981', cont: codigoISO('PRLU', '601127'), cliente: 'Frutícola Tres Cumbres S.A.', carga: 'Arándanos', desde: 'viernes 3 de noviembre, 09:02', hasta: 'lunes 6 de noviembre, 06:15', lecturas: 4153, desvios: 1, huella: '7d02 c3e9 a1b4 5f60 08ce 92d7 33ab 1e45', estado: 'Emitido con observación' },
   ];
 
   /* -------------------------------------------- naves y planificación */
   db.recaladas = [
-    { id: 'REC-1183', nave: 'Andes Pacífico', naviera: 'NAP', sitio: 1, eta: 'miércoles 6, 05:30', etd: 'miércoles 6, 21:00', estado: 'En operación', gruas: ['G1', 'G2', 'G3'], movs: 1240, hechos: 702, ventana: 'Confirmada', anuncio: 'BAPLIE recibido 03-12', prod: 27.4 },
-    { id: 'REC-1184', nave: 'Cóndor Austral', naviera: 'AAS', sitio: 2, eta: 'jueves 7, 14:00', etd: 'viernes 8, 06:00', estado: 'Recepción de exportación', gruas: ['G4', 'G5'], movs: 980, hechos: 0, ventana: 'Confirmada', anuncio: 'BAPLIE recibido 05-12', prod: null, cierre: 'jueves 7, 08:00' },
-    { id: 'REC-1185', nave: 'Humboldt Explorer', naviera: 'LHB', sitio: 3, eta: 'jueves 7, 22:00', etd: 'viernes 8, 18:00', estado: 'Anunciada', gruas: ['G6'], movs: 610, hechos: 0, ventana: 'Confirmada', anuncio: 'COPRAR recibido 04-12', prod: null },
-    { id: 'REC-1186', nave: 'Polaris Frost', naviera: 'PRL', sitio: 1, eta: 'sábado 9, 12:00', etd: 'domingo 10, 04:00', estado: 'Anunciada', gruas: ['G1', 'G2'], movs: 720, hechos: 0, ventana: 'Por confirmar', anuncio: 'BAPLIE recibido 06-12', prod: null, plazo: 'hoy, 12:00 (72 horas antes del atraque)' },
-    { id: 'REC-1187', nave: 'Mar de Chiloé', naviera: 'MCS', sitio: 3, eta: 'domingo 10, 08:00', etd: 'domingo 10, 23:00', estado: 'Anunciada', gruas: ['G6'], movs: 430, hechos: 0, ventana: 'Por confirmar', anuncio: 'COPRAR recibido 06-12', prod: null, plazo: 'jueves 7, 08:00' },
-    { id: 'REC-1188', nave: 'Brisa del Sur', naviera: 'BML', sitio: 2, eta: 'lunes 11, 10:00', etd: 'martes 12, 02:00', estado: 'Anunciada', gruas: ['G4'], movs: 380, hechos: 0, ventana: 'Por confirmar', anuncio: 'Planilla recibida por el canal puente 06-12', prod: null, plazo: 'viernes 8, 10:00' },
+    { id: 'REC-1183', nave: 'Andes Pacífico', naviera: 'NAP', sitio: 1, eta: 'lunes 6, 05:30', etd: 'lunes 6, 21:00', estado: 'En operación', gruas: ['G1', 'G2', 'G3'], movs: 1240, hechos: 702, ventana: 'Confirmada', anuncio: 'BAPLIE recibido 03-11', prod: 27.4 },
+    { id: 'REC-1184', nave: 'Cóndor Austral', naviera: 'AAS', sitio: 2, eta: 'martes 7, 14:00', etd: 'miércoles 8, 06:00', estado: 'Recepción de exportación', gruas: ['G4', 'G5'], movs: 980, hechos: 0, ventana: 'Confirmada', anuncio: 'BAPLIE recibido 05-11', prod: null, cierre: 'martes 7, 08:00' },
+    { id: 'REC-1185', nave: 'Humboldt Explorer', naviera: 'LHB', sitio: 3, eta: 'martes 7, 22:00', etd: 'miércoles 8, 18:00', estado: 'Anunciada', gruas: ['G6'], movs: 610, hechos: 0, ventana: 'Confirmada', anuncio: 'COPRAR recibido 04-11', prod: null },
+    { id: 'REC-1186', nave: 'Polaris Frost', naviera: 'PRL', sitio: 1, eta: 'jueves 9, 12:00', etd: 'viernes 10, 04:00', estado: 'Anunciada', gruas: ['G1', 'G2'], movs: 720, hechos: 0, ventana: 'Por confirmar', anuncio: 'BAPLIE recibido 06-11', prod: null, plazo: 'hoy, 12:00 (72 horas antes del atraque)' },
+    { id: 'REC-1187', nave: 'Mar de Chiloé', naviera: 'MCS', sitio: 3, eta: 'viernes 10, 08:00', etd: 'viernes 10, 23:00', estado: 'Anunciada', gruas: ['G6'], movs: 430, hechos: 0, ventana: 'Por confirmar', anuncio: 'COPRAR recibido 06-11', prod: null, plazo: 'martes 7, 08:00' },
+    { id: 'REC-1188', nave: 'Brisa del Sur', naviera: 'BML', sitio: 2, eta: 'sábado 11, 10:00', etd: 'domingo 12, 02:00', estado: 'Anunciada', gruas: ['G4'], movs: 380, hechos: 0, ventana: 'Por confirmar', anuncio: 'Planilla recibida por el canal puente 06-11', prod: null, plazo: 'miércoles 8, 10:00' },
   ];
   db.planes = {
     'REC-1184': { estado: 'Propuesto', version: 3, propuestoA: '09:40', movs: 980, remocionesEst: 41, reglas: ['RP-03 v2', 'RP-07 v1', 'RP-11 v4'], correcciones: [], marcado: false },
-    'REC-1183': { estado: 'Aprobado', version: 5, propuestoA: 'martes 5, 18:20', movs: 1240, remocionesEst: 58, reglas: ['RP-03 v2', 'RP-07 v1'], correcciones: [{ por: 'Carolina Méndez Araya', motivo: 'Segregación de carga peligrosa', detalle: 'Bahía 34 cambia a cubierta' }], aprobado: 'Carolina Méndez Araya, martes 5, 19:02', marcado: false },
+    'REC-1183': { estado: 'Aprobado', version: 5, propuestoA: 'domingo 5, 18:20', movs: 1240, remocionesEst: 58, reglas: ['RP-03 v2', 'RP-07 v1'], correcciones: [{ por: 'Carolina Méndez Araya', motivo: 'Segregación de carga peligrosa', detalle: 'Bahía 34 cambia a cubierta' }], aprobado: 'Carolina Méndez Araya, domingo 5, 19:02', marcado: false },
   };
   db.reglas = [
     { id: 'RP-03', n: 'Contenedores de más de 26 toneladas bajo los más livianos de la misma bahía', version: 2, desde: '14-10', por: 'Carolina Méndez Araya', estado: 'Vigente', hist: [{ v: 1, desde: '02-08', cambio: 'Umbral de 28 toneladas' }, { v: 2, desde: '14-10', cambio: 'Umbral baja a 26 toneladas tras la validación en sombra' }] },
     { id: 'RP-07', n: 'Refrigerados de una misma nave en tomas de tableros distintos', version: 1, desde: '20-09', por: 'Carolina Méndez Araya', estado: 'Vigente', hist: [{ v: 1, desde: '20-09', cambio: 'Regla registrada desde la entrevista con el planificador' }] },
-    { id: 'RP-11', n: 'Orden de recepción por puerto de destino: el último puerto, abajo', version: 4, desde: '03-11', por: 'Carolina Méndez Araya', estado: 'Vigente', hist: [{ v: 3, desde: '11-10', cambio: 'Excepción para transbordos' }, { v: 4, desde: '03-11', cambio: 'Excepción también para la alianza' }] },
+    { id: 'RP-11', n: 'Orden de recepción por puerto de destino: el último puerto, abajo', version: 4, desde: '04-10', por: 'Carolina Méndez Araya', estado: 'Vigente', hist: [{ v: 3, desde: '11-10', cambio: 'Excepción para transbordos' }, { v: 4, desde: '04-10', cambio: 'Excepción también para la alianza' }] },
     { id: 'RP-14', n: 'Carga peligrosa clase 3 separada al menos una bahía de la clase 5.1', version: 1, desde: '22-09', por: 'Carolina Méndez Araya', estado: 'Vigente', hist: [{ v: 1, desde: '22-09', cambio: 'Registrada' }] },
-    { id: 'RP-15', n: 'Grúas de más de 20 años sin ciclos dobles de 40 pies', version: 1, desde: '29-11', por: 'Carolina Méndez Araya', estado: 'En validación en sombra', hist: [{ v: 1, desde: '29-11', cambio: 'Propuesta; se compara contra los planes aprobados de noviembre' }] },
+    { id: 'RP-15', n: 'Grúas de más de 20 años sin ciclos dobles de 40 pies', version: 1, desde: '30-10', por: 'Carolina Méndez Araya', estado: 'En validación en sombra', hist: [{ v: 1, desde: '30-10', cambio: 'Propuesta; se compara contra los planes aprobados de octubre' }] },
   ];
   db.productividad = [{ grua: 'G1', movh: 28.6, meta: 30, espera: 3 }, { grua: 'G2', movh: 25.9, meta: 30, espera: 7 }, { grua: 'G3', movh: 27.7, meta: 30, espera: 4 }];
 
@@ -212,7 +212,7 @@ function semilla() {
 
   /* -------------------------------------------- evidencia comercial: hechos facturables (sin montos) */
   const TIPOS_HF = {
-    ALM: { n: 'Días de almacenaje', u: 'días', regla: 'Días calendario desde el ingreso al patio hasta la salida, desde el cuarto día' },
+    ALM: { n: 'Días de almacenaje', u: 'días', regla: 'Días corridos desde el día siguiente al ingreso al patio (el ingreso es el día cero), con 3 días libres y corte a las 23:59' },
     MOV: { n: 'Movimiento adicional', u: 'movimientos', regla: 'Remoción pedida por el cliente o por la autoridad, registrada por telemetría' },
     PES: { n: 'Pesaje', u: 'pesajes', regla: 'Pesaje en la báscula del gate contra la masa bruta declarada' },
     INS: { n: 'Inspección', u: 'inspecciones', regla: 'Atención de la autoridad con acta firmada' },
@@ -227,11 +227,11 @@ function semilla() {
     const cant = tipo === 'ALM' || tipo === 'IMO' ? r.ent(1, 9) : tipo === 'REF' ? r.ent(18, 140) : tipo === 'MOV' ? r.ent(1, 3) : 1;
     db.hechos.push({ id: 'HF-' + (608400 + k), tipo, cont: c.cont, naviera: c.naviera, cliente: r.de(CLIENTES), cant, dia: -r.ent(0, 6), hora: hm(r.ent(360, 1380)), estado: r() < 0.82 ? 'Entregado con acuse' : 'Registrado', sello: Array.from({ length: 4 }, () => r.ent(0x1000, 0xffff).toString(16)).join(' '), origen: tipo === 'REF' ? 'Telemetría de toma ' + r.de(db.tableros).id : tipo === 'PES' ? 'Báscula del gate, puesto ' + r.ent(1, 8) : 'Telemetría de ' + r.de(['RTG-03', 'RTG-05', 'RTG-07', 'G1', 'G2']) });
   }
-  db.hechos[3] = { ...db.hechos[3], id: 'HF-608403', tipo: 'ALM', cont: codigoISO('ACLU', '118250'), naviera: 'ACL', cliente: 'Exportadora Valle Alto S.A.', cant: 6, estado: 'Objetado', origen: 'Entrada al gate el jueves 30 de noviembre, 16:42; salida al muelle el miércoles 6 de diciembre, 09:15' };
+  db.hechos[3] = { ...db.hechos[3], id: 'HF-608403', tipo: 'ALM', cont: codigoISO('ACLU', '118250'), naviera: 'ACL', cliente: 'Exportadora Valle Alto S.A.', cant: 3, estado: 'Objetado', origen: 'Entrada al gate el martes 31 de octubre, 16:42; salida al muelle el lunes 6 de noviembre, 09:15' };
   db.objeciones = [
-    { id: 'OB-0311', hecho: 'HF-608403', cliente: 'Exportadora Valle Alto S.A.', motivo: 'El cliente indica 5 días de almacenaje y no 6', presentada: 'miércoles 6, 08:12', por: 'Ignacio Herrera Vidal', estado: 'En revisión', plazo: 'viernes 8, 08:12', resolucion: null },
-    { id: 'OB-0308', hecho: 'HF-608377', cliente: 'Frutícola Tres Cumbres S.A.', motivo: 'Horas de conexión reefer: el contenedor estuvo desconectado durante la inspección', presentada: 'domingo 3, 15:40', por: 'Agencia de Aduanas Puerto Claro', estado: 'Aceptada', plazo: '—', resolucion: 'Se descuentan 2 horas: la telemetría de la toma TR-03/12 confirma la desconexión de 08:14 a 10:20' },
-    { id: 'OB-0305', hecho: 'HF-608351', cliente: 'Agrícola Los Aromos Ltda.', motivo: 'Movimiento adicional no solicitado', presentada: 'sábado 2, 11:05', por: 'Agencia de Aduana Cordillera', estado: 'Rechazada', plazo: '—', resolucion: 'La remoción RM-2177 la pidió la autoridad fitosanitaria (INS-3262, acta firmada)' },
+    { id: 'OB-0311', hecho: 'HF-608403', cliente: 'Exportadora Valle Alto S.A.', motivo: 'El cliente indica 2 días facturables y no 3: cuenta el día de la salida como libre', presentada: 'lunes 6, 08:12', por: 'Ignacio Herrera Vidal', estado: 'En revisión', plazo: 'miércoles 8, 08:12', resolucion: null },
+    { id: 'OB-0308', hecho: 'HF-608377', cliente: 'Frutícola Tres Cumbres S.A.', motivo: 'Horas de conexión reefer: el contenedor estuvo desconectado durante la inspección', presentada: 'viernes 3, 15:40', por: 'Agencia de Aduanas Puerto Claro', estado: 'Aceptada', plazo: '—', resolucion: 'Se descuentan 2 horas: la telemetría de la toma TR-03/12 confirma la desconexión de 08:14 a 10:20' },
+    { id: 'OB-0305', hecho: 'HF-608351', cliente: 'Agrícola Los Aromos Ltda.', motivo: 'Movimiento adicional no solicitado', presentada: 'jueves 2, 11:05', por: 'Agencia de Aduana Cordillera', estado: 'Rechazada', plazo: '—', resolucion: 'La remoción RM-2177 la pidió la autoridad fitosanitaria (INS-3262, acta firmada)' },
   ];
   db.conciliacion = [
     { dia: -1, hechos: 3912, entregados: 3912, acuses: 3912, difer: 0, estado: 'Conciliado' },
@@ -241,11 +241,11 @@ function semilla() {
 
   /* -------------------------------------------- energía y emisiones */
   db.equipos = [
-    { tipo: 'Grúas de muelle', n: 6, fuente: 'Eléctrica', consumo: 31840, unidad: 'kWh', emis: 9.9 },
-    { tipo: 'Grúas de patio diésel', n: 16, fuente: 'Diésel', consumo: 6120, unidad: 'litros', emis: 16.4 },
-    { tipo: 'Grúas de patio eléctricas', n: 2, fuente: 'Eléctrica', consumo: 2960, unidad: 'kWh', emis: 0.9 },
-    { tipo: 'Tractocamiones', n: 42, fuente: 'Diésel', consumo: 7480, unidad: 'litros', emis: 20.0 },
-    { tipo: 'Equipos pesados', n: 14, fuente: 'Diésel', consumo: 2210, unidad: 'litros', emis: 5.9 },
+    { tipo: 'Grúas de muelle', n: 6, fuente: 'Eléctrica', consumo: 9084, unidad: 'kWh', emis: 2.8 },
+    { tipo: 'Grúas de patio diésel', n: 16, fuente: 'Diésel', consumo: 1746, unidad: 'litros', emis: 4.7 },
+    { tipo: 'Grúas de patio eléctricas', n: 2, fuente: 'Eléctrica', consumo: 844, unidad: 'kWh', emis: 0.3 },
+    { tipo: 'Tractocamiones', n: 42, fuente: 'Diésel', consumo: 2134, unidad: 'litros', emis: 5.7 },
+    { tipo: 'Equipos pesados', n: 14, fuente: 'Diésel', consumo: 631, unidad: 'litros', emis: 1.7 },
   ];
   db.intensidad = { base: 12.4, actual: 11.6, porRemociones: 4.6, unidad: 'kg CO₂e por contenedor' };
 
@@ -258,8 +258,8 @@ function semilla() {
     db.mensajes.push({ id: 'MSG-' + (770300 + k), tipo, dir, naviera: n.id, version: n.version, hora: hm(380 + k * 9), correl: 'COR-' + n.id + '-' + (4400 + Math.floor(k / 3)), estado: rech ? 'Rechazado' : 'Aceptado', motivo: rech ? r.de(['Segmento EQD con dígito verificador ISO 6346 erróneo', 'Firma de origen no corresponde a la contraparte', 'Versión del mensaje no acordada con la contraparte']) : '', segmentos: r.ent(40, 900) });
   }
   db.puente = [
-    { id: 'PU-0091', naviera: 'IMC', archivo: 'IMC_carga_REC-1190.xlsx', tipo: 'Lista de carga', hora: 'domingo 3, 17:20', estado: 'Confirmado', filas: 212, errores: 0 },
-    { id: 'PU-0094', naviera: 'BML', archivo: 'BML_BrisaDelSur_anuncio.xlsx', tipo: 'Anuncio de recalada', hora: 'miércoles 6, 07:05', estado: 'Confirmado', filas: 1, errores: 0 },
+    { id: 'PU-0091', naviera: 'IMC', archivo: 'IMC_carga_REC-1190.xlsx', tipo: 'Lista de carga', hora: 'viernes 3, 17:20', estado: 'Confirmado', filas: 212, errores: 0 },
+    { id: 'PU-0094', naviera: 'BML', archivo: 'BML_BrisaDelSur_anuncio.xlsx', tipo: 'Anuncio de recalada', hora: 'lunes 6, 07:05', estado: 'Confirmado', filas: 1, errores: 0 },
   ];
   db.intercambios = [
     { contraparte: 'Aduana', canal: 'Servicio de intercambio de la autoridad', ultimo: '10:18', hoy: 342, rechazados: 0, estado: 'En línea' },
@@ -332,12 +332,12 @@ function semilla() {
 
   /* -------------------------------------------- documentos y firmas */
   db.documentos = [
-    { id: 'DOC-55120', n: 'Instrucción de embarque IE-20871', tipo: 'Instrucción de embarque', version: 2, autor: 'Ignacio Herrera Vidal', fecha: 'miércoles 6, 09:12', etiquetas: ['REC-1184', 'Exportadora Valle Alto S.A.'], acceso: 'Agencia, documentación y planificación', firma: 'Pendiente' },
-    { id: 'DOC-55118', n: 'Acta de inspección INS-3291', tipo: 'Acta de inspección conjunta', version: 1, autor: 'ATOS (desde plantilla DT-01 v3)', fecha: 'miércoles 6, 08:40', etiquetas: ['Aduana', codigoISO('NVCU', '508812')], acceso: 'Autoridad, documentación y cliente', firma: 'Firmada' },
-    { id: 'DOC-55117', n: 'Conformidad de recepción VIS-240861', tipo: 'Conformidad de recepción', version: 1, autor: 'ATOS (desde plantilla DT-02 v2)', fecha: 'miércoles 6, 08:05', etiquetas: ['Transportes Ruta Cinco SpA'], acceso: 'Transporte, gate y cliente', firma: 'Firmada' },
-    { id: 'DOC-55101', n: 'Conformidad de hechos facturables de noviembre', tipo: 'Conformidad de los hechos facturables', version: 3, autor: 'Felipe Araya Núñez', fecha: 'domingo 3, 18:30', etiquetas: ['Exportadora Valle Alto S.A.', 'noviembre'], acceso: 'Facturación y cliente', firma: 'Pendiente' },
-    { id: 'DOC-55090', n: 'Certificado de integridad CF-AC-2028-0418', tipo: 'Certificado de cadena de frío', version: 1, autor: 'ATOS (desde plantilla DT-06 v2)', fecha: 'miércoles 6, 06:20', etiquetas: ['Cerezas', 'BL ATSU-77120'], acceso: 'Cliente y público con el código', firma: 'Firmada' },
-    { id: 'DOC-55077', n: 'Guía de despacho 0048213', tipo: 'Guía de despacho', version: 1, autor: 'Transportes Ruta Cinco SpA', fecha: 'miércoles 6, 07:48', etiquetas: ['HXLW-28'], acceso: 'Agencia, transporte y gate', firma: 'No aplica' },
+    { id: 'DOC-55120', n: 'Instrucción de embarque IE-20871', tipo: 'Instrucción de embarque', version: 2, autor: 'Ignacio Herrera Vidal', fecha: 'lunes 6, 09:12', etiquetas: ['REC-1184', 'Exportadora Valle Alto S.A.'], acceso: 'Agencia, documentación y planificación', firma: 'Pendiente' },
+    { id: 'DOC-55118', n: 'Acta de inspección INS-3291', tipo: 'Acta de inspección conjunta', version: 1, autor: 'ATOS (desde plantilla DT-01 v3)', fecha: 'lunes 6, 08:40', etiquetas: ['Aduana', codigoISO('NVCU', '508812')], acceso: 'Autoridad, documentación y cliente', firma: 'Firmada' },
+    { id: 'DOC-55117', n: 'Conformidad de recepción VIS-240861', tipo: 'Conformidad de recepción', version: 1, autor: 'ATOS (desde plantilla DT-02 v2)', fecha: 'lunes 6, 08:05', etiquetas: ['Transportes Ruta Cinco SpA'], acceso: 'Transporte, gate y cliente', firma: 'Firmada' },
+    { id: 'DOC-55101', n: 'Conformidad de hechos facturables de octubre', tipo: 'Conformidad de los hechos facturables', version: 3, autor: 'Felipe Araya Núñez', fecha: 'viernes 3, 18:30', etiquetas: ['Exportadora Valle Alto S.A.', 'octubre'], acceso: 'Facturación y cliente', firma: 'Pendiente' },
+    { id: 'DOC-55090', n: 'Certificado de integridad CF-AC-2028-0418', tipo: 'Certificado de cadena de frío', version: 1, autor: 'ATOS (desde plantilla DT-06 v2)', fecha: 'lunes 6, 06:20', etiquetas: ['Cerezas', 'BL ATSU-77120'], acceso: 'Cliente y público con el código', firma: 'Firmada' },
+    { id: 'DOC-55077', n: 'Guía de despacho 0048213', tipo: 'Guía de despacho', version: 1, autor: 'Transportes Ruta Cinco SpA', fecha: 'lunes 6, 07:48', etiquetas: ['HXLW-28'], acceso: 'Agencia, transporte y gate', firma: 'No aplica' },
   ];
 
   /* -------------------------------------------- convivencia con el TOS 2012 */
@@ -366,15 +366,15 @@ function semilla() {
     { id: 'TA-6', perfiles: ['jefatura', 'planificador'], t: 'Confirmar la ventana de atraque de REC-1186 Polaris Frost', proceso: 'Nave y planificación', prioridad: 'Alta', vence: '12:00', href: '#/nave/programacion', heredada: null },
     { id: 'TA-7', perfiles: ['documentacion'], t: 'Proponer la cita de inspección INS-3300 (Aduana): riesgo de incumplimiento', proceso: 'Inspecciones', prioridad: 'Alta', vence: '11:00', href: '#/inspecciones/INS-3300', heredada: null },
     { id: 'TA-8', perfiles: ['documentacion', 'inspector'], t: 'Cita de inspección INS-3307 propuesta para hoy a las 11:30', proceso: 'Inspecciones', prioridad: 'Media', vence: '11:00', href: '#/inspecciones/INS-3307', heredada: null },
-    { id: 'TA-9', perfiles: ['facturacion'], t: 'Resolver la objeción OB-0311 de Exportadora Valle Alto S.A.', proceso: 'Evidencia facturable', prioridad: 'Media', vence: 'viernes 8, 08:12', href: '#/evidencia/objeciones', heredada: { turno: 'anterior', hace: '2 h 30 min' } },
+    { id: 'TA-9', perfiles: ['facturacion'], t: 'Resolver la objeción OB-0311 de Exportadora Valle Alto S.A.', proceso: 'Evidencia facturable', prioridad: 'Media', vence: 'miércoles 8, 08:12', href: '#/evidencia/objeciones', heredada: { turno: 'anterior', hace: '2 h 30 min' } },
     { id: 'TA-10', perfiles: ['facturacion'], t: 'Conciliación diaria del domingo 5: 3.912 hechos con acuse', proceso: 'Evidencia facturable', prioridad: 'Baja', vence: '18:00', href: '#/evidencia/conciliacion', heredada: null },
     { id: 'TA-11', perfiles: ['transporte'], t: 'Reservar la cita del contenedor ATOU 482913 7', proceso: 'Citas', prioridad: 'Alta', vence: '10:20', href: '#/gate/visita/VIS-240871', heredada: null },
     { id: 'TA-12', perfiles: ['carga'], t: 'Subir los documentos de ATOU 482913 7 para la prevalidación', proceso: 'Documentación', prioridad: 'Alta', vence: '10:20', href: '#/portal/documentos', heredada: null },
-    { id: 'TA-13', perfiles: ['carga'], t: 'Corregir la instrucción de embarque IE-20871: 2 campos marcados', proceso: 'Instrucción de embarque', prioridad: 'Media', vence: 'jueves 7, 08:00', href: '#/portal/instruccion', heredada: null },
+    { id: 'TA-13', perfiles: ['carga'], t: 'Corregir la instrucción de embarque IE-20871: 2 campos marcados', proceso: 'Instrucción de embarque', prioridad: 'Media', vence: 'martes 7, 08:00', href: '#/portal/instruccion', heredada: null },
     { id: 'TA-14', perfiles: ['inspector'], t: 'Firmar el acta de inspección INS-3291', proceso: 'Inspecciones', prioridad: 'Media', vence: '15:00', href: '#/firma', heredada: null },
-    { id: 'TA-15', perfiles: ['verificador'], t: 'Revisar el reporte de emisiones de noviembre', proceso: 'Energía y emisiones', prioridad: 'Media', vence: 'domingo 10', href: '#/emisiones/verificador', heredada: null },
-    { id: 'TA-16', perfiles: ['naviera_ni'], t: 'Cargar la lista de carga de REC-1190 por el canal puente', proceso: 'Hub de Integración', prioridad: 'Alta', vence: 'jueves 7, 12:00', href: '#/hub/puente', heredada: null },
-    { id: 'TA-17', perfiles: ['admin'], t: 'Revisar el cambio de tolerancia de masa bruta pedido por la jefatura', proceso: 'Administración', prioridad: 'Media', vence: 'jueves 7', href: '#/admin/parametros', heredada: null },
+    { id: 'TA-15', perfiles: ['verificador'], t: 'Revisar el reporte de emisiones de octubre', proceso: 'Energía y emisiones', prioridad: 'Media', vence: 'viernes 10', href: '#/emisiones/verificador', heredada: null },
+    { id: 'TA-16', perfiles: ['naviera_ni'], t: 'Cargar la lista de carga de REC-1190 por el canal puente', proceso: 'Hub de Integración', prioridad: 'Alta', vence: 'martes 7, 12:00', href: '#/hub/puente', heredada: null },
+    { id: 'TA-17', perfiles: ['admin'], t: 'Revisar el cambio de tolerancia de masa bruta pedido por la jefatura', proceso: 'Administración', prioridad: 'Media', vence: 'martes 7', href: '#/admin/parametros', heredada: null },
     { id: 'TA-18', perfiles: ['proteccion'], t: 'Simulacro de evacuación del muelle: preparar el conteo por zona', proceso: 'Identidad y acceso', prioridad: 'Media', vence: '14:00', href: '#/acceso/emergencia', heredada: null },
     { id: 'TA-19', perfiles: ['jefatura'], t: 'Aprobar la transferencia de autoridad de la zona R3 del patio refrigerado al ATOS (SA-031)', proceso: 'Convivencia con el TOS 2012', prioridad: 'Media', vence: '15:00', href: '#/convivencia', heredada: null },
     { id: 'TA-20', perfiles: ['trabajador'], t: 'Tu credencial temporal del turno A vence a las 15:30', proceso: 'Identidad y acceso', prioridad: 'Baja', vence: '15:30', href: '#/acceso/credencial', heredada: null },
@@ -394,7 +394,7 @@ function semilla() {
     { id: 'NO-9', perfiles: ['jefatura', 'supervisor', 'admin'], t: 'El dominio Nave y planificación detuvo su avance: 7 divergencias', hora: '07:02', leida: false, href: '#/convivencia', critica: false },
     { id: 'NO-10', perfiles: ['transporte', 'conductor'], t: 'Franjas disponibles para hoy desde las 10:30', hora: '09:58', leida: false, href: '#/portal/citas', critica: false },
     { id: 'NO-11', perfiles: ['naviera_ni'], t: 'Se confirmó la planilla PU-0094 del anuncio de Brisa del Sur', hora: '07:06', leida: true, href: '#/hub/puente', critica: false },
-    { id: 'NO-12', perfiles: ['verificador'], t: 'El reporte de emisiones de noviembre está listo para revisión', hora: '08:00', leida: false, href: '#/emisiones/verificador', critica: false },
+    { id: 'NO-12', perfiles: ['verificador'], t: 'El reporte de emisiones de octubre está listo para revisión', hora: '08:00', leida: false, href: '#/emisiones/verificador', critica: false },
     { id: 'NO-13', perfiles: ['admin'], t: 'Exportación de auditoría lista para descargar', hora: '08:31', leida: true, href: '#/admin/auditoria', critica: false },
     { id: 'NO-14', perfiles: ['proteccion'], t: '312 credenciales temporales activas para la nombrada NOM-1206-A', hora: '06:45', leida: false, href: '#/acceso', critica: false },
     { id: 'NO-15', perfiles: ['trabajador'], t: 'Tu credencial temporal del turno A está activa', hora: '06:41', leida: false, href: '#/acceso/credencial', critica: false },
@@ -406,7 +406,7 @@ function semilla() {
     { id: 'AU-90011', hora: '06:41', quien: 'ATOS', accion: 'Emisión de 312 credenciales temporales', objeto: 'NOM-1206-A', modulo: 'Identidad y acceso', resultado: 'Correcto', ip: 'Red corporativa' },
     { id: 'AU-90014', hora: '07:02', quien: 'ATOS', accion: 'Detención automática del avance', objeto: 'Dominio Nave y planificación', modulo: 'Convivencia con el TOS 2012', resultado: 'Correcto', ip: 'Adaptador del TOS 2012' },
     { id: 'AU-90020', hora: '08:12', quien: 'Ignacio Herrera Vidal', accion: 'Objeción de un hecho facturable', objeto: 'HF-608403', modulo: 'Evidencia comercial y regulatoria', resultado: 'Correcto', ip: 'Fuera de la red corporativa · segundo factor' },
-    { id: 'AU-90023', hora: '08:31', quien: 'Rocío Tapia Morales', accion: 'Exportación de la auditoría', objeto: 'Accesos de noviembre (CSV)', modulo: 'Administración', resultado: 'Correcto', ip: 'Red corporativa' },
+    { id: 'AU-90023', hora: '08:31', quien: 'Rocío Tapia Morales', accion: 'Exportación de la auditoría', objeto: 'Accesos de octubre (CSV)', modulo: 'Administración', resultado: 'Correcto', ip: 'Red corporativa' },
     { id: 'AU-90027', hora: '09:40', quien: 'ATOS', accion: 'Propuesta automática de plan de estiba', objeto: 'REC-1184, versión 3', modulo: 'Nave y planificación', resultado: 'Correcto', ip: 'ATOS' },
     { id: 'AU-90031', hora: '10:02', quien: 'Rodrigo Peña Castro', accion: 'Intento de alta manual de movimiento', objeto: codigoISO('PMLU', '640027'), modulo: 'Gate, patio y equipos', resultado: 'Rechazado: los movimientos solo se registran por telemetría', ip: 'Terminal de cabina RTG-07' },
   ];

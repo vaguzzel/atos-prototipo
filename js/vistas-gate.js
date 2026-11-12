@@ -3,7 +3,7 @@
    dinámicas, verificaciones, remociones, barrido, núcleo operacional, tractocamiones, IN-02 e IN-03. */
 'use strict';
 
-const OFF = { cita: -45, prevalidacion: -20, aviso: -18, excepcion: 5, docCargado: 13, vuelveFila: 14, llegada: 4, masa: 6, destino: 8, barrera: 9, posicion: 21, salida: 38 };
+const OFF = { cita: -45, prevalidacion: -20, aviso: -18, excepcion: 5, docCargado: 20, vuelveFila: 21, llegada: 4, masa: 6, destino: 8, barrera: 9, posicion: 21, salida: 38 };
 const PASOS_EXP = [
   { n: 'Cita', est: 'Cita confirmada', actor: 'Empresa de transporte, en el portal' },
   { n: 'Prevalidación', est: 'Documentación validada', actor: 'Agencia de aduana, en el portal; ATOS valida' },
@@ -51,7 +51,7 @@ function asignarPosicion(v) {
 }
 const textoPos = (p) => `Bloque ${p.b}, bahía ${p.bahia}, fila ${p.fila}, altura ${p.alt}`;
 function razonesPos(v, p) {
-  return [`Bloque ${p.b}: recepción de exportación de la nave Cóndor Austral (REC-1184), cierre jueves 7, 08:00.`, `Bahía ${p.bahia}: el plan de estiba propuesto la embarca en la secuencia 2 de la grúa G4.`, `Altura ${p.alt}: ${num(v.masaMed / 1000, 1)} toneladas, bajo los contenedores más livianos (regla RP-03, versión 2).`, 'Sin remociones previstas: sale antes que los que quedan debajo (regla RP-11, versión 4).', `${v.rtg} es la grúa de patio libre más cercana: menos recorrido y menos emisiones.`].concat(p.cambio ? [p.cambio] : []);
+  return [`Bloque ${p.b}: recepción de exportación de la nave Cóndor Austral (REC-1184), cierre martes 7, 08:00.`, `Bahía ${p.bahia}: el plan de estiba propuesto la embarca en la secuencia 2 de la grúa G4.`, `Altura ${p.alt}: ${num(v.masaMed / 1000, 1)} toneladas, bajo los contenedores más livianos (regla RP-03, versión 2).`, 'Sin remociones previstas: sale antes que los que quedan debajo (regla RP-11, versión 4).', `${v.rtg} es la grúa de patio libre más cercana: menos recorrido y menos emisiones.`].concat(p.cambio ? [p.cambio] : []);
 }
 
 /* ---------------------------------------------------------------- flujo de ingreso de exportación */
@@ -169,7 +169,7 @@ ACC['v-exc-resolver'] = (el) => resolverExcepcion(visitaPorId(el.dataset.arg));
 function resolverExcepcion(v) {
   v.docs.aduana = 'ok'; v.excepcion = null; v.paso = Math.max(v.paso, 2);
   evento(v, 'docCargado', 'La agencia cargó la autorización aduanera; ATOS la validó', `Portal de clientes · ${v.agencia}`); evento(v, 'vuelveFila', `Vuelve a la fila conservando su franja ${textoFranja(franjaDe(v))}`, 'ATOS', 'destacado');
-  v.retraso = (v.retraso || 0) + 10;
+  v.retraso = (v.retraso || 0) + 18; // vuelve a la fila 18 min después: la visita queda ≥ 50 % más lenta que una validada (meta 13)
   v.paso = 2; v.eventos.filter((e) => e.paso == null).forEach((e) => { e.paso = 1; });
   E.db.tareas.filter((t) => t.t.includes(v.cont) && t.proceso === 'Documentación').forEach((t) => { t.hecha = true; }); E.db.tareas.filter((t) => t.id === 'TA-1').forEach((t) => { t.hecha = true; });
   notificar(`${v.patente} volvió a la fila del gate conservando su franja`, '#/gate/visita/' + v.id, ['gate', 'supervisor', 'carga']); auditar('Excepción documental resuelta', v.id); aviso('Documento validado: el camión vuelve a la fila con su franja.'); refrescar(); $('#t-paso')?.focus();
@@ -223,7 +223,7 @@ ACC['v-salida'] = (el) => {
   const v = visitaPorId(el.dataset.arg); const f = franjaDe(v); v.estadia = OFF.salida - OFF.llegada + (v.retraso || 0);
   evento(v, 'salida', `Salida registrada; estadía de ${v.estadia} minutos frente a la meta de 45`, 'Puesto de salida 3', 'destacado');
   E.db.estadias.unshift({ id: v.id, patente: v.patente, cont: v.cont, naviera: v.naviera, transporte: v.transporte, entrada: f.ini + OFF.llegada + (v.retraso || 0), salida: f.ini + OFF.salida + (v.retraso || 0), estadia: v.estadia, puesto: v.carril, excepcion: v.sinValidar ? 'Documentación' : '', tipo: 'Exportación' });
-  E.db.documentos.unshift({ id: 'DOC-' + (55130 + E.db.documentos.length), n: `Conformidad de recepción ${v.id}`, tipo: 'Conformidad de recepción', version: 1, autor: 'ATOS (desde plantilla DT-02 v2)', fecha: `miércoles 6, ${horaV(v, 'salida')}`, etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' });
+  E.db.documentos.unshift({ id: 'DOC-' + (55130 + E.db.documentos.length), n: `Conformidad de recepción ${v.id}`, tipo: 'Conformidad de recepción', version: 1, autor: 'ATOS (desde plantilla DT-02 v2)', fecha: `lunes 6, ${horaV(v, 'salida')}`, etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' });
   const c = E.db.citas.find((x) => x.visita === v.id); if (c) c.estado = 'Completada'; acumularELC(1); auditar('Salida registrada', `${v.patente} · estadía ${v.estadia} min`); avanzar(v, 6);
 };
 ACC['v-modificar'] = (el) => { const v = visitaPorId(el.dataset.arg); if (v.excepcion) { aviso('El camión está en el carril de excepción: primero se resuelve el documento.', 'error'); return; } if (v.paso > 2) { aviso('La cita ya no se puede modificar: el camión entró al gate.', 'error'); return; } v.paso = 0; E.ui.verPaso = {}; aviso('Elige la nueva franja. La anterior se libera al confirmar.'); refrescar(); $('#t-paso')?.focus(); };
@@ -255,7 +255,7 @@ ACC['r-avanzar'] = (el) => {
   const v = visitaPorId(el.dataset.arg); const f = franjaDe(v); const t = (m) => hm(f.ini + m);
   const ev = [['Cita de retiro confirmada', 'Portal de clientes', -40], ['Liberación aduanera y de la naviera verificadas', 'Hub de Integración · Aduana y naviera', -10], ['Entrada al gate; patente y conductor verificados', `Lector de patente, puesto 5`, 3], [`Contenedor cargado al camión desde ${textoPos(v.posicion)}`, 'Telemetría de RTG-11', 15], ['Salida registrada; lectura óptica confirma el contenedor', 'Puesto de salida 2', 31]][v.paso];
   v.eventos.push({ hora: t(ev[2]), t: ev[0], fuente: ev[1], clase: v.paso === 4 ? 'destacado' : '' });
-  if (v.paso === 4) { v.estadia = 28; E.db.estadias.unshift({ id: v.id, patente: v.patente, cont: v.cont, naviera: v.naviera, transporte: v.transporte, entrada: f.ini + 3, salida: f.ini + 31, estadia: 28, puesto: 5, excepcion: '', tipo: 'Importación' }); E.db.documentos.unshift({ id: 'DOC-' + (55160 + E.db.documentos.length), n: `Conformidad de entrega ${v.id}`, tipo: 'Conformidad de entrega', version: 1, autor: 'ATOS (desde plantilla DT-03 v2)', fecha: 'miércoles 6, ' + t(31), etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' }); }
+  if (v.paso === 4) { v.estadia = 28; E.db.estadias.unshift({ id: v.id, patente: v.patente, cont: v.cont, naviera: v.naviera, transporte: v.transporte, entrada: f.ini + 3, salida: f.ini + 31, estadia: 28, puesto: 5, excepcion: '', tipo: 'Importación' }); E.db.documentos.unshift({ id: 'DOC-' + (55160 + E.db.documentos.length), n: `Conformidad de entrega ${v.id}`, tipo: 'Conformidad de entrega', version: 1, autor: 'ATOS (desde plantilla DT-03 v2)', fecha: 'lunes 6, ' + t(31), etiquetas: [v.transporte, v.cont], acceso: 'Transporte, gate y cliente', firma: 'Pendiente' }); }
   v.paso++; acumularELC(1); auditar('Retiro de importación: ' + PASOS_IMP[v.paso - 1].est, v.id); anunciar('Estado: ' + estadoVisita(v)); refrescar(); $('#t-paso')?.focus();
 };
 R('/gate/retiro/:id', { id: 'gate-retiro-id', t: (p) => `Retiro ${p.id}`, area: 'gate.flujo', mod: 'gate', padre: 'gate-retiro', rf: ['RF-GAT-02', 'RF-GAT-11', 'RF-GAT-12', 'RF-PAT-05'], vista: (p) => { const v = visitaPorId(p.id); return v ? vistaRetiro(v) : vistaInexistente('visita', p.id); } });

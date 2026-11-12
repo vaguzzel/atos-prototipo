@@ -89,7 +89,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - Recuperar evidencia — `#/evidencia/recuperar`
 - Inspecciones de autoridad — `#/inspecciones`
 - Nueva cita de inspección — `#/inspecciones/nueva`
-- Cumplimiento de la hora acordada — `#/inspecciones/cumplimiento`
+- Inspecciones atrasadas — `#/inspecciones/cumplimiento`
 - Energía y emisiones — `#/emisiones`
 - Reporte para el verificador — `#/emisiones/verificador`
 - Hecho HF-608403 — `#/evidencia/hecho/:id`
@@ -188,7 +188,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - **Gate, patio y equipos**: Puesto de atención · Citas del día · Carril de excepción · Estadía por camión · Congestión y capacidad · Retiro de importación · Mapa del patio · Condiciones dinámicas · Verificaciones físicas · Remociones programadas · Barrido de bloques · Núcleo operacional · Despacho de tractocamiones · Terminal de cabina RTG-07 · Cabina de la grúa de muelle G2
 - **Patio refrigerado**: Mapa de tomas · Alarmas · Evidencia de cadena de frío · Certificados de integridad · Indicadores de alarma
 - **Nave y planificación**: Recaladas · Programación de sitios y grúas · Plan de estiba REC-1184 · Reglas del planificador · Productividad en tiempo real
-- **Evidencia comercial y regulatoria**: Inspecciones de autoridad · Cumplimiento de la hora acordada
+- **Evidencia comercial y regulatoria**: Inspecciones de autoridad · Inspecciones atrasadas
 - **Gestión**: Tablero analítico · Indicadores del concedente
 - **Servicios transversales**: App Móvil de Terreno · Identidad y acceso · Conteo de emergencia · Documentos · Convivencia con el TOS 2012 · Continuidad: operación sin enlace
 
@@ -205,7 +205,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 - **Gate, patio y equipos**: Puesto de atención · Citas del día · Carril de excepción · Estadía por camión · Congestión y capacidad · Retiro de importación · Mapa del patio · Condiciones dinámicas · Verificaciones físicas · Remociones programadas · Barrido de bloques · Núcleo operacional · Despacho de tractocamiones · Citas a tres bandas · Gemelo de operación · Terminal de cabina RTG-07 · Cabina de la grúa de muelle G2
 - **Patio refrigerado**: Mapa de tomas · Alarmas · Evidencia de cadena de frío · Certificados de integridad · Indicadores de alarma
 - **Nave y planificación**: Recaladas · Programación de sitios y grúas · Plan de estiba REC-1184 · Reglas del planificador · Productividad en tiempo real
-- **Evidencia comercial y regulatoria**: Hechos facturables · Objeciones · Conciliación diaria · Recuperar evidencia · Inspecciones de autoridad · Cumplimiento de la hora acordada · Energía y emisiones · Reporte para el verificador
+- **Evidencia comercial y regulatoria**: Hechos facturables · Objeciones · Conciliación diaria · Recuperar evidencia · Inspecciones de autoridad · Inspecciones atrasadas · Energía y emisiones · Reporte para el verificador
 - **Portal e integraciones**: Portal de clientes · Hub de Integración · Canal puente · Autoridades y operador ferroviario
 - **Gestión**: Contrapartes externas · Tablero analítico · Indicadores del concedente · Auditoría
 - **Servicios transversales**: App Móvil de Terreno · Identidad y acceso · Conteo de emergencia · Documentos · Firmas pendientes · Convivencia con el TOS 2012 · Continuidad: operación sin enlace
@@ -226,7 +226,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 ### Área de documentación
 
 - **Gate, patio y equipos**: Citas del día · Estadía por camión · Congestión y capacidad · Mapa del patio · Condiciones dinámicas · Verificaciones físicas · Remociones programadas · Barrido de bloques
-- **Evidencia comercial y regulatoria**: Inspecciones de autoridad · Cumplimiento de la hora acordada
+- **Evidencia comercial y regulatoria**: Inspecciones de autoridad · Inspecciones atrasadas
 - **Portal e integraciones**: Hub de Integración · Autoridades y operador ferroviario
 - **Gestión**: Contrapartes externas
 - **Servicios transversales**: Documentos · Firmas pendientes
@@ -339,7 +339,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 | Analista de facturación | Búsqueda global | Cualquier pantalla → campo de búsqueda (tecla /) → resultado | 2 |
 | Área de documentación | Inspecciones de autoridad | Inicio → acceso rápido «Inspecciones de autoridad» | 1 |
 | Área de documentación | Nueva cita de inspección | Inicio → acceso rápido «Nueva cita de inspección» | 1 |
-| Área de documentación | Cumplimiento de la hora acordada | Inicio → acceso rápido «Cumplimiento de la hora acordada» | 1 |
+| Área de documentación | Inspecciones atrasadas | Inicio → acceso rápido «Inspecciones atrasadas» | 1 |
 | Área de documentación | Documentos | Inicio → acceso rápido «Documentos» | 1 |
 | Área de documentación | Firmas pendientes | Inicio → acceso rápido «Firmas pendientes» | 1 |
 | Área de documentación | Bandeja de tareas | Inicio → ícono de bandeja en la barra superior | 1 |
@@ -400,7 +400,7 @@ Prototipo interactivo de ATOS, la solución de Terabyte para el Terminal Portuar
 | Perfiles con acceso | Conciliación diaria | Menú principal «Evidencia comercial y regulatoria» → «Conciliación diaria» | 2 |
 | Perfiles con acceso | Recuperar evidencia | Menú principal «Evidencia comercial y regulatoria» → «Recuperar evidencia» | 2 |
 | Perfiles con acceso | Inspecciones de autoridad | Menú principal «Evidencia comercial y regulatoria» → «Inspecciones de autoridad» | 2 |
-| Perfiles con acceso | Cumplimiento de la hora acordada | Menú principal «Evidencia comercial y regulatoria» → «Cumplimiento de la hora acordada» | 2 |
+| Perfiles con acceso | Inspecciones atrasadas | Menú principal «Evidencia comercial y regulatoria» → «Inspecciones atrasadas» | 2 |
 | Perfiles con acceso | Energía y emisiones | Menú principal «Evidencia comercial y regulatoria» → «Energía y emisiones» | 2 |
 | Perfiles con acceso | Reporte para el verificador | Menú principal «Evidencia comercial y regulatoria» → «Reporte para el verificador» | 2 |
 | Perfiles con acceso | Portal de clientes | Menú principal «Portal e integraciones» → «Portal de clientes» | 2 |

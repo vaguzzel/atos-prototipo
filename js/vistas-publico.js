@@ -68,8 +68,8 @@ R('/', {
         <div class="tarjeta crema"><h3>${T('Horarios y avisos', 'Hours and notices')}</h3>
         <ul class="lista-simple"><li><strong>${T('Gate', 'Gate')}</strong>: ${T('24 horas, todos los días.', '24 hours, every day.')}</li><li><strong>${T('Oficina de documentación', 'Documentation office')}</strong>: ${T('lunes a viernes, de 08:00 a 18:00.', 'Monday to Friday, 08:00 to 18:00.')}</li>
         <li>${insig(T('Aviso', 'Notice'), 'aviso')} ${T('Temporada de fruta: mayor demanda de franjas entre las 07:00 y las 10:00.', 'Fruit season: higher slot demand between 07:00 and 10:00.')}</li>
-        <li>${insig(T('Aviso', 'Notice'), 'info')} ${T('Cierre de recepción de la nave Cóndor Austral: jueves 7 de diciembre, 08:00.', 'Receiving cut-off for the vessel Cóndor Austral: Thursday, December 7, 08:00.')}</li>
-        <li>${insig(T('Aviso', 'Notice'), 'info')} ${T('Mantenimiento del puesto de entrada 7: viernes 8, de 02:00 a 04:00.', 'Maintenance of entry lane 7: Friday 8, 02:00 to 04:00.')}</li></ul></div>
+        <li>${insig(T('Aviso', 'Notice'), 'info')} ${T('Cierre de recepción de la nave Cóndor Austral: martes 7 de noviembre, 08:00.', 'Receiving cut-off for the vessel Cóndor Austral: Tuesday, November 7, 08:00.')}</li>
+        <li>${insig(T('Aviso', 'Notice'), 'info')} ${T('Mantenimiento del puesto de entrada 7: miércoles 8, de 02:00 a 04:00.', 'Maintenance of entry lane 7: Wednesday 8, 02:00 to 04:00.')}</li></ul></div>
       </div>
     </section>`;
   },

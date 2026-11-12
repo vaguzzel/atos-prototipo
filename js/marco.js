@@ -142,7 +142,7 @@ function barraPublica() {
   return `<header class="cabecera-publica" role="banner">
     <section class="franja-estado" aria-label="${T('Estado del terminal', 'Terminal status')}"><span class="vivo" aria-hidden="true"></span><ul>
       <li><strong>Terminal Portuario Aconcagua</strong></li><li>${T(`Gate abierto · espera promedio de ${prom} min`, `Gate open · average wait ${prom} min`)}</li>
-      ${prox ? `<li>${T(`Próxima franja con cupos: ${hm(prox.ini)}`, `Next slot with availability: ${hm(prox.ini)}`)}</li>` : ''}<li>${T('Cierre de recepción de la nave Cóndor Austral: jueves 7 de diciembre, 08:00', 'Receiving cut-off for the vessel Cóndor Austral: Thursday, December 7, 08:00')}</li></ul></section>
+      ${prox ? `<li>${T(`Próxima franja con cupos: ${hm(prox.ini)}`, `Next slot with availability: ${hm(prox.ini)}`)}</li>` : ''}<li>${T('Cierre de recepción de la nave Cóndor Austral: martes 7 de noviembre, 08:00', 'Receiving cut-off for the vessel Cóndor Austral: Tuesday, November 7, 08:00')}</li></ul></section>
     <div class="barra barra-publica"><a class="marca" href="#/">${LOGO}<span class="nombre"><b>ATOS</b><small>${T('Sistema de operación del terminal', 'Terminal operating system')}</small></span></a>
       <form class="buscador-publico" role="search" data-form="buscar-publico" novalidate>${ic('buscar')}<label class="sr" for="bp-q">${T('Buscar en el portal', 'Search the portal')}</label>
         <input type="search" id="bp-q" list="bp-sug" autocomplete="off" placeholder="${T('Contenedor o certificado', 'Container or certificate')}" aria-describedby="bp-ayuda"><span class="sr" id="bp-ayuda">${T('Por ejemplo, ATOU 482913 7 o CF-AC-2028-0418.', 'For example, ATOU 482913 7 or CF-AC-2028-0418.')}</span>
