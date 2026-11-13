@@ -262,7 +262,7 @@ function panelDemo() {
     <hr class="sep">
     <fieldset><legend>${T('Idioma', 'Language')}</legend><div class="idioma" role="group" aria-label="${T('Idioma', 'Language')}"><button type="button" aria-pressed="${IDIOMA === 'es'}" data-acc="idioma" data-arg="es" lang="es">Español</button><button type="button" aria-pressed="${IDIOMA === 'en'}" data-acc="idioma" data-arg="en" lang="en">English</button></div></fieldset>
     <fieldset><legend>${T('Simulaciones', 'Simulations')}</legend>
-      <label class="opcion"><input type="checkbox" id="demo-elc" data-cambio="demo-elc" ${E.db.elc.sinEnlace ? 'checked' : ''}>${T('Caída del enlace exterior (ELC)', 'External link down (ELC)')}</label>
+      <label class="opcion"><input type="checkbox" id="demo-elc" data-cambio="demo-elc" ${E.db.elc.sinEnlace ? 'checked' : ''}>${T('Caída del enlace exterior (sigue operando el ELC)', 'External link down (ELC keeps operating)')}</label>
       <label class="opcion"><input type="checkbox" id="demo-cob" data-cambio="demo-cob" ${E.db.terreno.sinCobertura ? 'checked' : ''}>${T('Pérdida de cobertura en terreno', 'Loss of field coverage')}</label>
       <label class="opcion"><input type="checkbox" id="demo-agua" data-cambio="demo-agua" ${LS.get('agua', true) ? 'checked' : ''}>${T('Agua en movimiento en los fondos de la portada y del acceso', 'Moving water in the home and sign-in backgrounds')}</label>
       <label class="opcion"><input type="checkbox" id="demo-traza" data-cambio="demo-traza" ${E.trazabilidad ? 'checked' : ''}>${T('Modo trazabilidad (requerimientos por pantalla)', 'Traceability mode (requirements per screen)')}</label>
