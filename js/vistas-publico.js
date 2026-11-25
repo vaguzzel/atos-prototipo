@@ -43,7 +43,7 @@ R('/', {
       <ul class="cifras">
         <li><span class="cifra">${prom}<small> min</small></span><span>${T(`espera promedio en los ${cong.length} puestos de entrada`, `average wait across the ${cong.length} entry lanes`)}</span></li>
         <li class="${altos.length ? 'alerta' : ''}"><span class="cifra">${altos.length}<small> ${T('de', 'of')} ${cong.length}</small></span><span>${altos.length ? T(`puestos con espera alta, sobre ${META} min: ${peor.e}, con ${peor.v} min`, `lanes with a long wait, above ${META} min: ${peor.e}, ${peor.v} min`) : T(`puestos con espera alta, sobre ${META} min`, `lanes with a long wait, above ${META} min`)}</span></li>
-        <li><span class="cifra">3</span><span>${T('camiones en el carril de excepción, sin ocupar un puesto', 'trucks in the exception lane, without taking a lane')}</span></li>
+        <li><span class="cifra">${enExcepcion()}</span><span>${T('camiones en el carril de excepción, sin ocupar un puesto', 'trucks in the exception lane, without taking a lane')}</span></li>
       </ul>
       <div class="reticula r2">
         <div class="tarjeta"><h3 id="t-espera">${T('Espera por puesto de entrada', 'Wait per entry lane')}</h3><p class="detalle">${T(`Minutos de espera estimada. La línea punteada marca la espera alta, sobre ${META} min.`, `Estimated wait in minutes. The dotted line marks a long wait, above ${META} min.`)}</p>
@@ -154,7 +154,7 @@ R('/recuperar', {
       `<form data-form="recup" novalidate>${campo({ id: 'r-c1', et: T('Contraseña nueva', 'New password'), tipo: 'password', val: 'clave', req: true, auto: 'new-password', ayuda: T('Al menos 8 caracteres.', 'At least 8 characters.') })}${campo({ id: 'r-c2', et: T('Repite la contraseña', 'Repeat the password'), tipo: 'password', val: 'clave', req: true, auto: 'new-password' })}${btn(T('Guardar contraseña', 'Save password'), { submit: true, tipo: 'clave' })}</form>`,
       `${msj('ok', T('Tu contraseña quedó actualizada.', 'Your password was updated.'), T('Por seguridad, cerramos tus otras sesiones abiertas.', 'For security, we closed your other open sessions.'))}${btn(T('Ir a ingresar', 'Go to sign in'), { href: '#/ingresar', acc: 'recup-fin' })}`,
     ][p];
-    return `<div class="caja"><h1 tabindex="-1" id="titulo-pagina">${T('Recuperar el acceso', 'Recover access')}</h1>${pasos(lista, p, { etq: T('Pasos para recuperar el acceso', 'Steps to recover access') })}${cuerpo}<p style="margin-top:16px"><a href="#/ingresar" data-acc="recup-fin">${T('Volver a ingresar', 'Back to sign in')}</a></p></div>`;
+    return `<div class="caja"><h1 tabindex="-1" id="titulo-pagina">${T('Recuperar el acceso', 'Recover access')}</h1>${pasos(lista, p, { etq: T('Pasos para recuperar el acceso', 'Steps to recover access') })}${cuerpo}<p style="margin-top:16px"><a class="enlace-solo" href="#/ingresar" data-acc="recup-fin">${T('Volver a ingresar', 'Back to sign in')}</a></p></div>`;
   },
 });
 FORM.recup = (f) => {

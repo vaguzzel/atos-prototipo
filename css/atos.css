@@ -89,6 +89,8 @@ h1 .codigo, h2 .codigo, h3 .codigo { font-family: var(--f-texto); font-size: .82
 .avatar { width: 40px; height: 40px; flex: none; border-radius: 50%; display: inline-grid; place-content: center; font-weight: 700; font-size: .875rem; letter-spacing: .02em; color: var(--indigo-3); background: linear-gradient(135deg, var(--crema) 0%, var(--coral) 100%); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .85), 0 6px 14px -8px rgba(166, 61, 70, .6); }
 .perfil-actual strong { display: block; font-size: .9375rem; color: var(--indigo); }
 .chip-enlace { display: inline-flex; align-items: center; gap: var(--e1); font-size: .875rem; font-weight: 600; padding: 2px 12px; border-radius: 999px; border: 1px solid var(--linea-suave); background: rgba(255, 255, 255, .9); white-space: nowrap; }
+.chip-enlace { position: relative; }
+.chip-enlace::after { content: ''; position: absolute; inset: -9px 0; }
 .chip-enlace.caido { background: var(--coral-osc); color: var(--blanco); border-color: var(--coral-osc); }
 
 /* ---------------------------------------------------------------- marco con menú lateral */
@@ -102,7 +104,7 @@ h1 .codigo, h2 .codigo, h3 .codigo { font-family: var(--f-texto); font-size: .82
 .lateral a[aria-current="page"] { background: var(--blanco); color: var(--indigo); box-shadow: var(--sombra); }
 .lateral a[aria-current="page"]::before { content: ''; position: absolute; left: 5px; top: 11px; bottom: 11px; width: 4px; border-radius: 4px; background: var(--accion); }
 .lateral a[aria-current="page"]:focus-visible, .lateral a.activo:focus-visible { outline-color: var(--indigo-3); }
-.lateral .sub a { padding-left: 42px; font-weight: 400; min-height: 40px; }
+.lateral .sub a { padding-left: 42px; font-weight: 400; min-height: var(--toque); }
 .principal { padding: var(--e5) var(--e6) var(--e7); min-width: 0; animation: aparecer .18s ease-out; }
 .principal:focus { outline: none; }
 @keyframes aparecer { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -112,7 +114,7 @@ h1 .codigo, h2 .codigo, h3 .codigo { font-family: var(--f-texto); font-size: .82
 .migas ol { list-style: none; display: flex; flex-wrap: wrap; gap: var(--e1); margin: 0 0 var(--e3); padding: 0; font-size: .9375rem; }
 .migas li { display: flex; align-items: center; gap: var(--e1); color: var(--indigo-2); }
 .migas li + li::before { content: '›'; color: var(--indigo-2); }
-.migas a { color: var(--indigo); display: inline-flex; align-items: center; min-height: var(--toque); }
+.migas a { color: var(--indigo); display: inline-flex; align-items: center; justify-content: center; min-height: var(--toque); min-width: var(--toque); }
 .cabecera { display: flex; flex-wrap: wrap; gap: var(--e4); align-items: flex-end; justify-content: space-between; margin-bottom: var(--e4); position: relative; }
 .cabecera .intro { max-width: 70ch; }
 .cabecera .acciones { display: flex; flex-wrap: wrap; gap: var(--e2); }
@@ -152,7 +154,8 @@ dl.datos { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,
 .kpi { display: flex; flex-direction: column; gap: var(--e1); }
 .kpi .valor { font-size: 2.125rem; font-weight: 600; color: var(--indigo); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
 .kpi .meta { font-size: .875rem; color: var(--indigo-2); }
-.kpi a.valor { text-decoration: none; }
+.kpi a.valor { text-decoration: none; position: relative; }
+.kpi a.valor::after { content: ''; position: absolute; inset: -4px 0; }
 .kpi a.valor:hover { text-decoration: underline; }
 hr.sep { border: 0; height: 1px; background: linear-gradient(90deg, rgba(115, 129, 176, 0), var(--indigo-suave) 30%, var(--indigo-suave) 70%, rgba(115, 129, 176, 0)); margin: var(--e5) 0; }
 
@@ -241,6 +244,14 @@ input[type="checkbox"]:checked:disabled { background: var(--indigo-suave); borde
 .calendario { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--e1); }
 .calendario .dsem { font-size: .75rem; font-weight: 700; text-align: center; color: var(--indigo-2); text-transform: uppercase; }
 .calendario button { min-height: 52px; border: 1px solid var(--linea-suave); border-radius: var(--radio-s); background: rgba(255, 255, 255, .85); color: var(--indigo); font: inherit; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; padding: 2px; }
+.calendario button { position: relative; }
+/* En el teléfono, el calendario usa todo el ancho de su grupo y un área invisible completa los 44 px (RT-25.03). */
+@media (max-width: 600px) {
+  fieldset:has(> .calendario) { padding-inline: 0; }
+  fieldset:has(> .calendario) > legend { margin-inline: var(--e3); }
+  .calendario { gap: 2px; }
+  .calendario button::after { content: ''; position: absolute; inset: 0 -1px; }
+}
 .calendario button small { font-size: .6875rem; font-weight: 600; color: var(--indigo-2); }
 .calendario button:hover { background: var(--cielo-claro); }
 .calendario button[aria-pressed="true"] { background: var(--accion); color: var(--blanco); border-color: transparent; box-shadow: var(--brillo); }
@@ -304,11 +315,19 @@ thead th { background: var(--cielo-bruma); color: var(--indigo); font-weight: 70
 th.n, td.n { text-align: right; }
 tbody tr:hover { background: var(--cielo-bruma); }
 tbody tr.sel { background: var(--cielo-claro); }
-th button.orden { font: inherit; font-weight: 700; color: var(--indigo-3); background: none; border: 0; padding: 0 2px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; min-height: var(--toque); }
+th button.orden { font: inherit; font-weight: 700; color: var(--indigo-3); background: none; border: 0; padding: 0 2px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; min-height: var(--toque); min-width: var(--toque); }
 th button.orden:hover { text-decoration: underline; }
 td .boton, td .boton-icono { min-height: var(--toque); }
 .celda-check { width: 48px; }
 .celda-check input { margin: 0; }
+/* Objetivos táctiles de 44 × 44 px (RT-25.03) sin cambiar la densidad de las tablas: un área invisible extiende
+   las casillas, los enlaces de las celdas y el chip del enlace exterior, como el botón «Más información». */
+td input[type="checkbox"], th input[type="checkbox"] { position: relative; }
+td input[type="checkbox"]::after, th input[type="checkbox"]::after { content: ''; position: absolute; inset: -11px; }
+td a, th a, dd > a { position: relative; }
+td a::after, th a::after, dd > a::after { content: ''; position: absolute; inset: -11px 0; }
+.enlace-solo { display: inline-flex; align-items: center; min-height: var(--toque); }
+.grupo-botones > a { display: inline-flex; align-items: center; min-height: var(--toque); }
 .paginacion { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--e2); margin-top: var(--e3); font-size: .9375rem; }
 .paginacion ul { display: flex; gap: var(--e1); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
 .paginacion button { min-width: var(--toque); min-height: var(--toque); border: 1px solid var(--linea-suave); background: rgba(255, 255, 255, .85); border-radius: 999px; font: inherit; font-weight: 600; color: var(--indigo); cursor: pointer; }
@@ -480,7 +499,7 @@ a.tablero-reefer:hover { border-color: var(--indigo); box-shadow: var(--sombra);
 .cabina { background: var(--indigo-3); color: var(--blanco); min-height: 100vh; display: flex; flex-direction: column; }
 .cabina :focus-visible { outline: 3px solid var(--blanco); }
 .cabina .cab-barra { display: flex; flex-wrap: wrap; gap: var(--e3); align-items: center; padding: var(--e3) var(--e5); border-bottom: 2px solid var(--blanco); font-size: 1.125rem; font-weight: 600; }
-.cabina .cab-barra a { color: var(--blanco); }
+.cabina .cab-barra a { color: var(--blanco); display: inline-flex; align-items: center; min-height: 56px; }
 .cabina h1 { color: var(--blanco); font-family: var(--f-texto); font-weight: 700; font-size: 1.5rem; margin: 0; }
 .cabina .instruccion { flex: 1; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--e5); padding: var(--e5); }
 .cabina .gigante { font-size: clamp(2.5rem, 1.5rem + 4vw, 5rem); font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
